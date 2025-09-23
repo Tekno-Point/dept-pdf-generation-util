@@ -93,6 +93,7 @@ public class DownloadMergedPdfServiceImpl implements DownloadMergedPdfService {
             JsonObject primaryPersonalDetailsObj = jsonUtility.getJsonObjectByKey("primary", personalDetailObj);
             String placeName = jsonUtility.getJsonKeyValue("city", primaryPersonalDetailsObj);
             String primaryMobileNo = jsonUtility.getJsonKeyValue("mobileNumber", primaryPersonalDetailsObj);
+            JsonObject imagesJson = jsonUtility.getJsonObjectByKey("images", userData);
             List<String> combineData = new ArrayList<>();
             for (JsonElement element : pdfNames) {
                 String names = element.getAsString();
@@ -101,7 +102,7 @@ public class DownloadMergedPdfServiceImpl implements DownloadMergedPdfService {
                     String armedForcesResponse = "";
                     try {
                         armedForcesResponse = Base64.getEncoder().encodeToString(
-                                generateLifeStylePDF.generateArmedForcesPDF(applicationNo, lifeAssureName, armObj, isOmniDoc, placeName, primaryMobileNo, countryCode));
+                                generateLifeStylePDF.generateArmedForcesPDF(applicationNo, lifeAssureName, armObj, isOmniDoc, placeName, primaryMobileNo, countryCode, imagesJson));
                         logger.info("Armed forces pdf response:{}", armedForcesResponse);
                         if (!armedForcesResponse.isEmpty()) {
                             combineData.add(armedForcesResponse);
@@ -116,7 +117,7 @@ public class DownloadMergedPdfServiceImpl implements DownloadMergedPdfService {
                     String fishingResponse = "";
                     try {
                         fishingResponse = Base64.getEncoder().encodeToString(
-                                generateLifeStylePDF.generateFishingPDF(applicationNo, lifeAssureName, fishingObj, isOmniDoc, placeName, primaryMobileNo, countryCode));
+                                generateLifeStylePDF.generateFishingPDF(applicationNo, lifeAssureName, fishingObj, isOmniDoc, placeName, primaryMobileNo, countryCode, imagesJson));
                         logger.info("Fishing pdf response:{}", fishingResponse);
                         if (!fishingResponse.isEmpty()) {
                             combineData.add(fishingResponse);
@@ -130,7 +131,7 @@ public class DownloadMergedPdfServiceImpl implements DownloadMergedPdfService {
                     String divingResponse = "";
                     try {
                         divingResponse = Base64.getEncoder().encodeToString(
-                                generateLifeStylePDF.generateDivingPDF(applicationNo, lifeAssureName, divingObj, isOmniDoc, placeName, primaryMobileNo, countryCode));
+                                generateLifeStylePDF.generateDivingPDF(applicationNo, lifeAssureName, divingObj, isOmniDoc, placeName, primaryMobileNo, countryCode, imagesJson));
                         logger.info("Diving pdf response:{}", divingResponse);
                         if (!divingResponse.isEmpty()) {
                             combineData.add(divingResponse);
@@ -144,7 +145,7 @@ public class DownloadMergedPdfServiceImpl implements DownloadMergedPdfService {
                     String drivingResponse = "";
                     try {
                         drivingResponse = Base64.getEncoder().encodeToString(
-                                generateLifeStylePDF.generateDrivingPDF(applicationNo, lifeAssureName, drivingObj, isOmniDoc, placeName, primaryMobileNo, countryCode));
+                                generateLifeStylePDF.generateDrivingPDF(applicationNo, lifeAssureName, drivingObj, isOmniDoc, placeName, primaryMobileNo, countryCode, imagesJson));
                         logger.info("Driving pdf response:{}", drivingResponse);
                         if (!drivingResponse.isEmpty()) {
                             combineData.add(drivingResponse);
@@ -158,7 +159,7 @@ public class DownloadMergedPdfServiceImpl implements DownloadMergedPdfService {
                     String aviationResponse = "";
                     try {
                         aviationResponse = Base64.getEncoder().encodeToString(
-                                generateLifeStylePDF.generateAviationPDF(applicationNo, lifeAssureName, aviationObj, isOmniDoc, placeName, primaryMobileNo, countryCode));
+                                generateLifeStylePDF.generateAviationPDF(applicationNo, lifeAssureName, aviationObj, isOmniDoc, placeName, primaryMobileNo, countryCode, imagesJson));
                         logger.info("Aviation pdf response:{}", aviationResponse);
                         if (!aviationResponse.isEmpty()) {
                             combineData.add(aviationResponse);
@@ -172,7 +173,7 @@ public class DownloadMergedPdfServiceImpl implements DownloadMergedPdfService {
                     String miningResponse = "";
                     try {
                         miningResponse = Base64.getEncoder().encodeToString(
-                                generateLifeStylePDF.generateMiningPDF(applicationNo, lifeAssureName, miningObj, isOmniDoc, placeName, primaryMobileNo, countryCode));
+                                generateLifeStylePDF.generateMiningPDF(applicationNo, lifeAssureName, miningObj, isOmniDoc, placeName, primaryMobileNo, countryCode, imagesJson));
                         logger.info("Mining pdf response:{}", miningResponse);
                         if (!miningResponse.isEmpty()) {
                             combineData.add(miningResponse);
@@ -186,7 +187,7 @@ public class DownloadMergedPdfServiceImpl implements DownloadMergedPdfService {
                     String occupationResponse = "";
                     try {
                         occupationResponse = Base64.getEncoder().encodeToString(
-                                generateLifeStylePDF.generateOccupationPDF(applicationNo, lifeAssureName, occupationalObj, isOmniDoc, placeName, primaryMobileNo, countryCode));
+                                generateLifeStylePDF.generateOccupationPDF(applicationNo, lifeAssureName, occupationalObj, isOmniDoc, placeName, primaryMobileNo, countryCode, imagesJson));
                         logger.info("Occupational pdf response:{}", occupationResponse);
                         if (!occupationResponse.isEmpty()) {
                             combineData.add(occupationResponse);
@@ -201,7 +202,7 @@ public class DownloadMergedPdfServiceImpl implements DownloadMergedPdfService {
                     String oilRefineryResponse = "";
                     try {
                         oilRefineryResponse = Base64.getEncoder().encodeToString(
-                                generateLifeStylePDF.generateOilRefineryPDF(applicationNo, lifeAssureName, oilRefineryObj, isOmniDoc, placeName, primaryMobileNo, countryCode));
+                                generateLifeStylePDF.generateOilRefineryPDF(applicationNo, lifeAssureName, oilRefineryObj, isOmniDoc, placeName, primaryMobileNo, countryCode, imagesJson));
                         logger.info("Oil Refinery pdf response:{}", oilRefineryResponse);
                         if (!oilRefineryResponse.isEmpty()) {
                             combineData.add(oilRefineryResponse);
@@ -216,7 +217,7 @@ public class DownloadMergedPdfServiceImpl implements DownloadMergedPdfService {
                     String marineResponse = "";
                     try {
                         marineResponse = Base64.getEncoder().encodeToString(
-                                generateLifeStylePDF.generateMarinePDF(applicationNo, lifeAssureName, marineObj, isOmniDoc, placeName, primaryMobileNo, countryCode));
+                                generateLifeStylePDF.generateMarinePDF(applicationNo, lifeAssureName, marineObj, isOmniDoc, placeName, primaryMobileNo, countryCode, imagesJson));
                         logger.info("Marine pdf response:{}", marineResponse);
                         if (!marineResponse.isEmpty()) {
                             combineData.add(marineResponse);
@@ -230,7 +231,7 @@ public class DownloadMergedPdfServiceImpl implements DownloadMergedPdfService {
                     String medicalResp = "";
                     try {
                         medicalResp = Base64.getEncoder().encodeToString(
-                                generateHealthPDF.generateThyroidPDF(applicationNo, lifeAssureName, medical, isOmniDoc, placeName, primaryMobileNo, countryCode));
+                                generateHealthPDF.generateThyroidPDF(applicationNo, lifeAssureName, medical, isOmniDoc, placeName, primaryMobileNo, countryCode, imagesJson));
                         logger.info("Thyroid pdf response:{}", medicalResp);
                         if (!medicalResp.isEmpty()) {
                             combineData.add(medicalResp);
@@ -295,7 +296,8 @@ public class DownloadMergedPdfServiceImpl implements DownloadMergedPdfService {
                     }
                 }
             }
-            return this.downloadMergedMedicalLifestylePdf(combineData, applicationNo);
+            JsonObject metadataObj = jsonUtility.getJsonObjectByKey("metadata",userData);
+            return this.downloadMergedMedicalLifestylePdf(combineData, applicationNo, metadataObj);
         } catch (Exception e) {
             JsonObject object = new JsonObject();
             logger.error("Exception occurs in medical and lifestyle merged pdf:{}", e.getMessage());
@@ -306,15 +308,18 @@ public class DownloadMergedPdfServiceImpl implements DownloadMergedPdfService {
     }
 
     @Override
-    public byte[] downloadMergedMedicalLifestylePdf(List<String> base64String, String applicationNumber) {
+    public byte[] downloadMergedMedicalLifestylePdf(List<String> base64String, String applicationNumber, JsonObject metadataObj) {
         try (ByteArrayOutputStream output = new ByteArrayOutputStream()) {
             PdfWriter writer = new PdfWriter(output);
             PdfDocument pdf = new PdfDocument(writer);
             //
+            String author = jsonUtility.getJsonKeyValue("author", metadataObj);
+            String creator = jsonUtility.getJsonKeyValue("creator", metadataObj);
+            String title = jsonUtility.getJsonKeyValue("title", metadataObj);
             PdfDocumentInfo pdfDocumentInfo=pdf.getDocumentInfo();
-            pdfDocumentInfo.setAuthor("IndiaFirstLife");
-            pdfDocumentInfo.setCreator("DEPT");
-            pdfDocumentInfo.setTitle("Medical Lifestyle Form");
+            pdfDocumentInfo.setAuthor(author);
+            pdfDocumentInfo.setCreator(creator);
+            pdfDocumentInfo.setTitle(title);
             pdfDocumentInfo.addCreationDate();
             PdfMerger merger = new PdfMerger(pdf);
             for (String base64Pdf : base64String) {

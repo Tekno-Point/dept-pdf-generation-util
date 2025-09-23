@@ -1,11 +1,7 @@
 package com.pdfGeneration.service.impl;
 
-import com.google.gson.JsonArray;
-import com.google.gson.JsonElement;
 import com.google.gson.JsonObject;
 import com.itextpdf.io.font.FontConstants;
-import com.itextpdf.io.image.ImageData;
-import com.itextpdf.io.image.ImageDataFactory;
 import com.itextpdf.kernel.color.Color;
 import com.itextpdf.kernel.font.PdfFont;
 import com.itextpdf.kernel.font.PdfFontFactory;
@@ -15,15 +11,12 @@ import com.itextpdf.kernel.pdf.PdfDocumentInfo;
 import com.itextpdf.kernel.pdf.PdfWriter;
 import com.itextpdf.layout.Document;
 import com.itextpdf.layout.border.Border;
-import com.itextpdf.layout.border.SolidBorder;
 import com.itextpdf.layout.element.*;
 import com.itextpdf.layout.property.FontKerning;
 import com.itextpdf.layout.property.TextAlignment;
 import com.itextpdf.layout.property.UnitValue;
-import com.pdfGeneration.constants.PdfConstant;
 import com.pdfGeneration.service.FatcaPDFService;
 import com.pdfGeneration.utility.JsonUtility;
-import com.pdfGeneration.utility.OnlineUtility;
 import com.pdfGeneration.utility.PDFUtility;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -31,13 +24,7 @@ import org.springframework.stereotype.Service;
 
 import java.io.ByteArrayOutputStream;
 import java.text.SimpleDateFormat;
-import java.time.LocalDate;
-import java.time.Period;
-import java.time.format.DateTimeFormatter;
-import java.time.format.DateTimeParseException;
 import java.util.*;
-import java.util.stream.Collectors;
-import java.util.stream.Stream;
 
 @Service
 public class FatcaPDFServiceImpl implements FatcaPDFService {
@@ -76,20 +63,26 @@ public class FatcaPDFServiceImpl implements FatcaPDFService {
         try (PdfWriter writer = new PdfWriter(baos)) {
             PdfDocument pdfDoc = new PdfDocument(writer);
             //
+            JsonObject metadataObj = jsonUtility.getJsonObjectByKey("metadata",userData);
+            String author = jsonUtility.getJsonKeyValue("author", metadataObj);
+            String creator = jsonUtility.getJsonKeyValue("creator", metadataObj);
+            String title = jsonUtility.getJsonKeyValue("title", metadataObj);
             PdfDocumentInfo pdfDocumentInfo=pdfDoc.getDocumentInfo();
-            pdfDocumentInfo.setAuthor("IndiaFirstLife");
-            pdfDocumentInfo.setCreator("DEPT");
-            pdfDocumentInfo.setTitle("FATCA FORM");
+            pdfDocumentInfo.setAuthor(author);
+            pdfDocumentInfo.setCreator(creator);
+            pdfDocumentInfo.setTitle(title);
             pdfDocumentInfo.addCreationDate();
             pdfDoc.addNewPage();
 
-            String logoFilename = "risipLogo.png";
-            String logoBase64 = pdfUtility.getImageAsBase64(PdfConstant.commonPdfImgUrl+logoFilename);
-            String checkedLogo = "checked_2_20x21.png";
-            String imgCheckBase64 = pdfUtility.getImageAsBase64(PdfConstant.commonPdfImgUrl+checkedLogo);
+            JsonObject imagesJson = jsonUtility.getJsonObjectByKey("images",userData);
 
-            String uncheckedLogo = "unchecked_20x21.png";
-            String imgUncheckBase64 = pdfUtility.getImageAsBase64(PdfConstant.commonPdfImgUrl+uncheckedLogo);
+            String logoFilename = jsonUtility.getJsonKeyValue("logo", imagesJson);
+            String logoBase64 = pdfUtility.getImageAsBase64(logoFilename);
+            String checkedLogo = jsonUtility.getJsonKeyValue("checkedLogo", imagesJson);
+            String imgCheckBase64 = pdfUtility.getImageAsBase64(checkedLogo);
+
+            String uncheckedLogo = jsonUtility.getJsonKeyValue("uncheckedLogo", imagesJson);
+            String imgUncheckBase64 = pdfUtility.getImageAsBase64(uncheckedLogo);
 
             Image img = pdfUtility.getPDFLogo(logoBase64);
             Image imgChecked = pdfUtility.getCheckedImage(imgCheckBase64);

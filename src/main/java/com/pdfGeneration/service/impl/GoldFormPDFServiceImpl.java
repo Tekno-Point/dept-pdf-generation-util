@@ -17,7 +17,6 @@ import com.itextpdf.layout.border.Border;
 import com.itextpdf.layout.border.SolidBorder;
 import com.itextpdf.layout.element.*;
 import com.itextpdf.layout.property.*;
-import com.pdfGeneration.constants.PdfConstant;
 import com.pdfGeneration.service.GoldFormPDFService;
 import com.pdfGeneration.utility.JsonUtility;
 import com.pdfGeneration.utility.PDFUtility;
@@ -128,13 +127,14 @@ try {
         PdfDocument pdfDoc = new PdfDocument(writer);
         pdfDoc.addNewPage();
 
+        JsonObject imagesJson = jsonUtility.getJsonObjectByKey("images",userData);
 
-        String logoFilename = "commonlogo.png";
-        String logoBase64 = pdfUtility.getImageAsBase64(PdfConstant.commonPdfImgUrl + logoFilename);
-        String checkedLogo = "checked_2_20x21.png";
-        String imgCheckBase64 = pdfUtility.getImageAsBase64(PdfConstant.commonPdfImgUrl + checkedLogo);
-        String uncheckedLogo = "unchecked_20x21.png";
-        String imgUncheckBase64 = pdfUtility.getImageAsBase64(PdfConstant.commonPdfImgUrl + uncheckedLogo);
+        String logoFilename = jsonUtility.getJsonKeyValue("logo", imagesJson);
+        String logoBase64 = pdfUtility.getImageAsBase64(logoFilename);
+        String checkedLogo = jsonUtility.getJsonKeyValue("checkedLogo", imagesJson);
+        String imgCheckBase64 = pdfUtility.getImageAsBase64(checkedLogo);
+        String uncheckedLogo = jsonUtility.getJsonKeyValue("uncheckedLogo", imagesJson);
+        String imgUncheckBase64 = pdfUtility.getImageAsBase64(uncheckedLogo);
         Image img = pdfUtility.getPDFLogo(logoBase64);
         img.setWidth(200f);
         img.setHeight(120f);
@@ -3425,8 +3425,8 @@ try {
         table.addCell(headingCell);
         Table insuranceDetails = new Table(2);
 
-        logoFilename = "rupee.png";
-        String logoBase641 =  pdfUtility.getImageAsBase64(PdfConstant.commonPdfImgUrl + logoFilename);
+        logoFilename = jsonUtility.getJsonKeyValue("rupee", imagesJson);
+        String logoBase641 =  pdfUtility.getImageAsBase64(logoFilename);
         Image rupeeLogo = pdfUtility.getPDFLogo(logoBase641);
 
         p = new Paragraph("Parents’/ Husband’s insurance details - total sum insured (");

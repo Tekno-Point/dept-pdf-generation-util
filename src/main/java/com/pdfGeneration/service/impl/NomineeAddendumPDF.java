@@ -9,7 +9,6 @@ import com.itextpdf.layout.element.*;
 import com.itextpdf.layout.property.FontKerning;
 import com.itextpdf.layout.property.TextAlignment;
 import com.itextpdf.layout.property.VerticalAlignment;
-import com.pdfGeneration.constants.PdfConstant;
 import com.pdfGeneration.utility.JsonUtility;
 import com.pdfGeneration.utility.PDFUtility;
 import org.slf4j.Logger;
@@ -25,13 +24,14 @@ abstract class NomineeAddendumPDF {
 
     abstract Table codeTable(String codeData, float[] pointColumnWidths);
 
-    public Table generateNomineePDF(PDFUtility pdfUtility, JsonUtility jsonUtility, String applicationNo, JsonArray nomineeList){
+    public Table generateNomineePDF(PDFUtility pdfUtility, JsonUtility jsonUtility, String applicationNo, JsonArray nomineeList, JsonObject imagesJson){
         Table nomineeTable = new Table(1);
         Table table = new Table(1);
-        String checkedLogo = "checked_2_20x21.png";
-        String imgCheckBase64 = pdfUtility.getImageAsBase64(PdfConstant.commonPdfImgUrl+checkedLogo);
-        String uncheckedLogo = "unchecked_20x21.png";
-        String imgUncheckBase64 = pdfUtility.getImageAsBase64(PdfConstant.commonPdfImgUrl+uncheckedLogo);
+
+        String checkedLogo = jsonUtility.getJsonKeyValue("checkedLogo", imagesJson);
+        String imgCheckBase64 = pdfUtility.getImageAsBase64(checkedLogo);
+        String uncheckedLogo = jsonUtility.getJsonKeyValue("uncheckedLogo", imagesJson);
+        String imgUncheckBase64 = pdfUtility.getImageAsBase64(uncheckedLogo);
 
         Image imgChecked = pdfUtility.getCheckedImage(imgCheckBase64);
         Image imgUnchecked = pdfUtility.getUncheckedImage(imgUncheckBase64);

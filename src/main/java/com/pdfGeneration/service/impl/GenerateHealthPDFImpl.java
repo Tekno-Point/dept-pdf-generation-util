@@ -16,7 +16,6 @@ import com.itextpdf.layout.property.FontKerning;
 import com.itextpdf.layout.property.ListNumberingType;
 import com.itextpdf.layout.property.TextAlignment;
 import com.itextpdf.layout.property.VerticalAlignment;
-import com.pdfGeneration.constants.PdfConstant;
 import com.pdfGeneration.service.GenerateHealthPDF;
 import com.pdfGeneration.utility.JsonUtility;
 import com.pdfGeneration.utility.PDFUtility;
@@ -44,7 +43,7 @@ public class GenerateHealthPDFImpl implements GenerateHealthPDF {
 //    private OnlineUtility onlineUtility;
 
     @Override
-    public byte[] generateHyperTensionPDF(String applicationNumber, String nameOfLifeAssured, JsonObject hypertension, boolean isOmniDoc, String placeName, String primaryMobileNo, String countryCode) {
+    public byte[] generateHyperTensionPDF(String applicationNumber, String nameOfLifeAssured, JsonObject hypertension, boolean isOmniDoc, String placeName, String primaryMobileNo, String countryCode, JsonObject imagesJson) {
 
         ByteArrayOutputStream baos = new ByteArrayOutputStream();
         byte[] bytesPdf = null;
@@ -52,15 +51,15 @@ public class GenerateHealthPDFImpl implements GenerateHealthPDF {
             PdfDocument pdfDoc = new PdfDocument(writer);
             pdfDoc.addNewPage();
             logger.info("Hypertension json object:{}", hypertension);
-            String logoFilename = "hypertension.png";
 
-            String logoBase64 =  pdfUtility.getImageAsBase64(PdfConstant.commonPdfImgUrl + logoFilename);
+            String logoFilename = jsonUtility.getJsonKeyValue("hypertension", imagesJson);
+            String logoBase64 =  pdfUtility.getImageAsBase64(logoFilename);
             Image img = pdfUtility.getPDFLogo(logoBase64);
 
-            String checkedLogo = "checked_2_20x21.png";
-            String imgCheckBase64 = pdfUtility.getImageAsBase64(PdfConstant.commonPdfImgUrl + checkedLogo);
-            String uncheckedLogo = "unchecked_20x21.png";
-            String imgUncheckBase64 = pdfUtility.getImageAsBase64(PdfConstant.commonPdfImgUrl + uncheckedLogo);
+            String checkedLogo = jsonUtility.getJsonKeyValue("checkedLogo", imagesJson);
+            String imgCheckBase64 = pdfUtility.getImageAsBase64(checkedLogo);
+            String uncheckedLogo = jsonUtility.getJsonKeyValue("uncheckedLogo", imagesJson);
+            String imgUncheckBase64 = pdfUtility.getImageAsBase64(uncheckedLogo);
 
             Image imgChecked = pdfUtility.getCheckedImage(imgCheckBase64);
 
@@ -477,21 +476,21 @@ public class GenerateHealthPDFImpl implements GenerateHealthPDF {
     }
 
     @Override
-    public byte[] generateThyroidPDF(String applicationNumber, String nameOfLifeAssured, JsonObject medical, boolean isOmniDoc, String placeName, String primaryMobileNo, String countryCode) {
+    public byte[] generateThyroidPDF(String applicationNumber, String nameOfLifeAssured, JsonObject medical, boolean isOmniDoc, String placeName, String primaryMobileNo, String countryCode, JsonObject imagesJson) {
         ByteArrayOutputStream baos = new ByteArrayOutputStream();
         byte[] bytesPdf = null;
         try (PdfWriter writer = new PdfWriter(baos)) {
             PdfDocument pdfDoc = new PdfDocument(writer);
             pdfDoc.addNewPage();
 
-            String logoFilename = "thyroid.png";
-            String logoBase64 =  pdfUtility.getImageAsBase64(PdfConstant.commonPdfImgUrl + logoFilename);
+            String logoFilename = jsonUtility.getJsonKeyValue("thyroid", imagesJson);
+            String logoBase64 =  pdfUtility.getImageAsBase64(logoFilename);
             Image img = pdfUtility.getPDFLogo(logoBase64);
 
-            String checkedLogo = "checked_2_20x21.png";
-            String imgCheckBase64 = pdfUtility.getImageAsBase64(PdfConstant.commonPdfImgUrl + checkedLogo);
-            String uncheckedLogo = "unchecked_20x21.png";
-            String imgUncheckBase64 = pdfUtility.getImageAsBase64(PdfConstant.commonPdfImgUrl + uncheckedLogo);
+            String checkedLogo = jsonUtility.getJsonKeyValue("checkedLogo", imagesJson);
+            String imgCheckBase64 = pdfUtility.getImageAsBase64(checkedLogo);
+            String uncheckedLogo = jsonUtility.getJsonKeyValue("uncheckedLogo", imagesJson);
+            String imgUncheckBase64 = pdfUtility.getImageAsBase64(uncheckedLogo);
 
             Image imgChecked = pdfUtility.getCheckedImage(imgCheckBase64);
 
@@ -773,7 +772,7 @@ public class GenerateHealthPDFImpl implements GenerateHealthPDF {
     }
 
     @Override
-    public byte[] generateRespiratoryPDF(String applicationNumber, String nameOfLifeAssured, JsonObject respiratoryDisorder, boolean isOmniDoc, String placeName, String primaryMobileNo, String countryCode) {
+    public byte[] generateRespiratoryPDF(String applicationNumber, String nameOfLifeAssured, JsonObject respiratoryDisorder, boolean isOmniDoc, String placeName, String primaryMobileNo, String countryCode, JsonObject imagesJson) {
 
         ByteArrayOutputStream baos = new ByteArrayOutputStream();
         byte[] bytesPdf = null;
@@ -781,14 +780,14 @@ public class GenerateHealthPDFImpl implements GenerateHealthPDF {
             PdfDocument pdfDoc = new PdfDocument(writer);
             pdfDoc.addNewPage();
 
-            String logoFilename = "respiratory.png";
-            String logoBase64 =  pdfUtility.getImageAsBase64(PdfConstant.commonPdfImgUrl + logoFilename);
+            String logoFilename = jsonUtility.getJsonKeyValue("respiratory", imagesJson);
+            String logoBase64 =  pdfUtility.getImageAsBase64(logoFilename);
             Image img = pdfUtility.getPDFLogo(logoBase64);
 
-            String checkedLogo = "checked_2_20x21.png";
-            String imgCheckBase64 = pdfUtility.getImageAsBase64(PdfConstant.commonPdfImgUrl + checkedLogo);
-            String uncheckedLogo = "unchecked_20x21.png";
-            String imgUncheckBase64 = pdfUtility.getImageAsBase64(PdfConstant.commonPdfImgUrl + uncheckedLogo);
+            String checkedLogo = jsonUtility.getJsonKeyValue("checkedLogo", imagesJson);
+            String imgCheckBase64 = pdfUtility.getImageAsBase64(checkedLogo);
+            String uncheckedLogo = jsonUtility.getJsonKeyValue("uncheckedLogo", imagesJson);
+            String imgUncheckBase64 = pdfUtility.getImageAsBase64(uncheckedLogo);
 
             Image imgChecked = pdfUtility.getCheckedImage(imgCheckBase64);
 
@@ -1155,7 +1154,7 @@ public class GenerateHealthPDFImpl implements GenerateHealthPDF {
     }
 
     @Override
-    public byte[] generateDiabetesPDF(String applicationNumber, String nameOfLifeAssured, JsonObject diabetes, boolean isOmniDoc, String placeName, String primaryMobileNo, String countryCode) {
+    public byte[] generateDiabetesPDF(String applicationNumber, String nameOfLifeAssured, JsonObject diabetes, boolean isOmniDoc, String placeName, String primaryMobileNo, String countryCode, JsonObject imagesJson) {
 
         ByteArrayOutputStream baos = new ByteArrayOutputStream();
         byte[] bytesPdf = null;
@@ -1163,14 +1162,14 @@ public class GenerateHealthPDFImpl implements GenerateHealthPDF {
             PdfDocument pdfDoc = new PdfDocument(writer);
             pdfDoc.addNewPage();
 
-            String logoFilename = "diabetes.png";
-            String logoBase64 =  pdfUtility.getImageAsBase64(PdfConstant.commonPdfImgUrl + logoFilename);
+            String logoFilename = jsonUtility.getJsonKeyValue("diabetes", imagesJson);
+            String logoBase64 =  pdfUtility.getImageAsBase64(logoFilename);
             Image img = pdfUtility.getPDFLogo(logoBase64);
 
-            String checkedLogo = "checked_2_20x21.png";
-            String imgCheckBase64 = pdfUtility.getImageAsBase64(PdfConstant.commonPdfImgUrl + checkedLogo);
-            String uncheckedLogo = "unchecked_20x21.png";
-            String imgUncheckBase64 = pdfUtility.getImageAsBase64(PdfConstant.commonPdfImgUrl + uncheckedLogo);
+            String checkedLogo = jsonUtility.getJsonKeyValue("checkedLogo", imagesJson);
+            String imgCheckBase64 = pdfUtility.getImageAsBase64(checkedLogo);
+            String uncheckedLogo = jsonUtility.getJsonKeyValue("uncheckedLogo", imagesJson);
+            String imgUncheckBase64 = pdfUtility.getImageAsBase64(uncheckedLogo);
 
             Image imgChecked = pdfUtility.getCheckedImage(imgCheckBase64);
 
@@ -1811,7 +1810,7 @@ public class GenerateHealthPDFImpl implements GenerateHealthPDF {
     }
 
     @Override
-    public byte[] generateCovidPDF(String applicationNumber, String nameOfLifeAssured, JsonObject medicalObj, boolean isOmniDoc, String placeName, String primaryMobileNo, JsonObject travelObj, String countryCode) {
+    public byte[] generateCovidPDF(String applicationNumber, String nameOfLifeAssured, JsonObject medicalObj, boolean isOmniDoc, String placeName, String primaryMobileNo, JsonObject travelObj, String countryCode, JsonObject imagesJson) {
         ByteArrayOutputStream baos = new ByteArrayOutputStream();
         byte[] bytesPdf = null;
         try (PdfWriter writer = new PdfWriter(baos)) {
@@ -1822,15 +1821,15 @@ public class GenerateHealthPDFImpl implements GenerateHealthPDF {
             Document document = new Document(pdfDoc, PageSize.A4).setFont(font).setFontSize(9);
             document.setMargins(0f, 10f, 10f, 10f);
 
-            String logoFilename = "covidsmallLogo.png";
-            String logoBase64 =  pdfUtility.getImageAsBase64(PdfConstant.commonPdfImgUrl + logoFilename);
+            String logoFilename = jsonUtility.getJsonKeyValue("covidsmallLogo", imagesJson);
+            String logoBase64 =  pdfUtility.getImageAsBase64(logoFilename);
             Image img = pdfUtility.getPDFLogo(logoBase64);
 
             Table logoDetails = new Table(new float[]{800F, 900F});
             logoDetails.addCell(new Cell().add(img).setTextAlignment(TextAlignment.LEFT).setBorder(Border.NO_BORDER));
 
-            logoFilename = "covidlogo.png";
-            logoBase64 =  pdfUtility.getImageAsBase64(PdfConstant.commonPdfImgUrl + logoFilename);
+            logoFilename = jsonUtility.getJsonKeyValue("covidlogo", imagesJson);
+            logoBase64 =  pdfUtility.getImageAsBase64(logoFilename);
             img = pdfUtility.getPDFLogo(logoBase64);
             img.setHeight(150);
             Paragraph p = new Paragraph();
@@ -1839,10 +1838,10 @@ public class GenerateHealthPDFImpl implements GenerateHealthPDF {
             logoDetails.addCell(new Cell().add(p).setTextAlignment(TextAlignment.RIGHT).setBorder(Border.NO_BORDER));
             document.add(logoDetails);
 
-            String checkedLogo = "checked_2_20x21.png";
-            String imgCheckBase64 = pdfUtility.getImageAsBase64(PdfConstant.commonPdfImgUrl + checkedLogo);
-            String uncheckedLogo = "unchecked_20x21.png";
-            String imgUncheckBase64 = pdfUtility.getImageAsBase64(PdfConstant.commonPdfImgUrl + uncheckedLogo);
+            String checkedLogo = jsonUtility.getJsonKeyValue("checkedLogo", imagesJson);
+            String imgCheckBase64 = pdfUtility.getImageAsBase64(checkedLogo);
+            String uncheckedLogo = jsonUtility.getJsonKeyValue("uncheckedLogo", imagesJson);
+            String imgUncheckBase64 = pdfUtility.getImageAsBase64(uncheckedLogo);
 
             Image imgUnchecked = pdfUtility.getUncheckedImage(imgUncheckBase64);
             imgUnchecked.setWidth(15);

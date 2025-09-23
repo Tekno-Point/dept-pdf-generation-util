@@ -15,7 +15,6 @@ import com.itextpdf.layout.Document;
 import com.itextpdf.layout.element.*;
 import com.itextpdf.layout.property.FontKerning;
 import com.itextpdf.layout.property.TextAlignment;
-import com.pdfGeneration.constants.PdfConstant;
 import com.pdfGeneration.service.ExistingPolicyPDFService;
 import com.pdfGeneration.utility.JsonUtility;
 import com.pdfGeneration.utility.MasterUtility;
@@ -97,12 +96,13 @@ public class ExistingPolicyPDFServiceImpl implements ExistingPolicyPDFService {
             String applicationNumber = jsonUtility.getJsonKeyValue("applicationNumber", userData);
             boolean isOmniDoc = jsonUtility.getBooleanKeyValue("isOmniDoc", userData);
 
-            String logoFilename = "risipLogo.png";
-            String logoBase64 = pdfUtility.getImageAsBase64(PdfConstant.commonPdfImgUrl+logoFilename);
-            String checkedLogo = "checked_2_20x21.png";
-            String imgCheckBase64 = pdfUtility.getImageAsBase64(PdfConstant.commonPdfImgUrl+checkedLogo);
-            String uncheckedLogo = "unchecked_20x21.png";
-            String imgUncheckBase64 = pdfUtility.getImageAsBase64(PdfConstant.commonPdfImgUrl+uncheckedLogo);
+            JsonObject imagesJson = jsonUtility.getJsonObjectByKey("images", userData);
+            String logoFilename = jsonUtility.getJsonKeyValue("risipLogo", imagesJson);
+            String logoBase64 = pdfUtility.getImageAsBase64(logoFilename);
+            String checkedLogo = jsonUtility.getJsonKeyValue("checkedLogo", imagesJson);
+            String imgCheckBase64 = pdfUtility.getImageAsBase64(checkedLogo);
+            String uncheckedLogo = jsonUtility.getJsonKeyValue("uncheckedLogo", imagesJson);
+            String imgUncheckBase64 = pdfUtility.getImageAsBase64(uncheckedLogo);
 
             Image img = pdfUtility.getPDFLogo(logoBase64);
             Image imgChecked = pdfUtility.getCheckedImage(imgCheckBase64);
@@ -111,10 +111,15 @@ public class ExistingPolicyPDFServiceImpl implements ExistingPolicyPDFService {
             PdfFont font = PdfFontFactory.createFont(FontConstants.TIMES_ROMAN);
             PdfDocument pdf = new PdfDocument(writer);
             ////////////////////
+            JsonObject metadataObj = jsonUtility.getJsonObjectByKey("metadata",userData);
+            String author = jsonUtility.getJsonKeyValue("author", metadataObj);
+            String creator = jsonUtility.getJsonKeyValue("creator", metadataObj);
+            String title = jsonUtility.getJsonKeyValue("title", metadataObj);
+
             PdfDocumentInfo pdfDocumentInfo=pdf.getDocumentInfo();
-            pdfDocumentInfo.setAuthor("IndiaFirstLife");
-            pdfDocumentInfo.setCreator("DEPT");
-            pdfDocumentInfo.setTitle("Existing Policy Form");
+            pdfDocumentInfo.setAuthor(author);
+            pdfDocumentInfo.setCreator(creator);
+            pdfDocumentInfo.setTitle(title);
             pdfDocumentInfo.addCreationDate();
 
             Document document = new Document(pdf, PageSize.A3).setFont(font);

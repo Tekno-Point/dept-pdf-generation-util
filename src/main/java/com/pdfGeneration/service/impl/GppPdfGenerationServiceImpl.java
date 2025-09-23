@@ -20,7 +20,6 @@ import com.itextpdf.layout.property.FontKerning;
 import com.itextpdf.layout.property.HorizontalAlignment;
 import com.itextpdf.layout.property.TextAlignment;
 import com.itextpdf.layout.property.VerticalAlignment;
-import com.pdfGeneration.constants.PdfConstant;
 import com.pdfGeneration.service.GppPdfGenerationService;
 import com.pdfGeneration.utility.JsonUtility;
 import com.pdfGeneration.utility.PDFUtility;
@@ -124,16 +123,17 @@ public class GppPdfGenerationServiceImpl  implements GppPdfGenerationService {
             PdfDocument pdfDoc = new PdfDocument(writer);
             pdfDoc.addNewPage();
 
-            String logoFilename = "commonlogo.png";
-            String logoBase64 = pdfUtility.getImageAsBase64(PdfConstant.commonPdfImgUrl + logoFilename);
+            JsonObject imagesJson = jsonUtility.getJsonObjectByKey("images", userData);
+            String logoFilename = jsonUtility.getJsonKeyValue("logo", imagesJson);
+            String logoBase64 = pdfUtility.getImageAsBase64(logoFilename);
             Image img = pdfUtility.getPDFLogo(logoBase64);
             img.setWidth(200f);
             img.setHeight(120f);
             
-            String checkedLogo = "checked_2_20x21.png";
-            String imgCheckBase64 = pdfUtility.getImageAsBase64(PdfConstant.commonPdfImgUrl + checkedLogo);
-            String uncheckedLogo = "unchecked_20x21.png";
-            String imgUncheckBase64 = pdfUtility.getImageAsBase64(PdfConstant.commonPdfImgUrl + uncheckedLogo);
+            String checkedLogo = jsonUtility.getJsonKeyValue("checkedLogo", imagesJson);
+            String imgCheckBase64 = pdfUtility.getImageAsBase64(checkedLogo);
+            String uncheckedLogo = jsonUtility.getJsonKeyValue("uncheckedLogo", imagesJson);
+            String imgUncheckBase64 = pdfUtility.getImageAsBase64(uncheckedLogo);
 
             Image imgChecked = pdfUtility.getCheckedImage(imgCheckBase64);
 

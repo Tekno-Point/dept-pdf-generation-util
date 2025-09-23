@@ -14,7 +14,6 @@ import com.itextpdf.layout.element.*;
 import com.itextpdf.layout.property.FontKerning;
 import com.itextpdf.layout.property.ListNumberingType;
 import com.itextpdf.layout.property.TextAlignment;
-import com.pdfGeneration.constants.PdfConstant;
 import com.pdfGeneration.service.EMandatePDFService;
 import com.pdfGeneration.utility.JsonUtility;
 import com.pdfGeneration.utility.PDFUtility;
@@ -61,48 +60,45 @@ public class EMandatePDFServiceImpl implements EMandatePDFService {
             String applicationNumber = jsonUtility.getJsonKeyValue("applicationNumber", userData);
             boolean isOmniDoc = jsonUtility.getBooleanKeyValue("isOmniDoc", userData);
 
+            JsonObject metadataObj = jsonUtility.getJsonObjectByKey("metadata",userData);
+            String author = jsonUtility.getJsonKeyValue("author", metadataObj);
+            String creator = jsonUtility.getJsonKeyValue("creator", metadataObj);
+            String title = jsonUtility.getJsonKeyValue("title", metadataObj);
             PdfDocument pdfDoc = new PdfDocument(writer);
             ////////////////////
             PdfDocumentInfo pdfDocumentInfo=pdfDoc.getDocumentInfo();
-            pdfDocumentInfo.setAuthor("IndiaFirstLife");
-            pdfDocumentInfo.setCreator("DEPT");
-            pdfDocumentInfo.setTitle("E-Mandate Form");
+            pdfDocumentInfo.setAuthor(author);
+            pdfDocumentInfo.setCreator(creator);
+            pdfDocumentInfo.setTitle(title);
             pdfDocumentInfo.addCreationDate();
             pdfDoc.addNewPage();
 
-            String logoFilename = "emandateLogo.png";
-            String logoBase64 = pdfUtility.getImageAsBase64(PdfConstant.commonPdfImgUrl+logoFilename);
+            JsonObject imagesJson = jsonUtility.getJsonObjectByKey("images",userData);
+            String logoFilename = jsonUtility.getJsonKeyValue("logo", imagesJson);
+            String logoBase64 = pdfUtility.getImageAsBase64(logoFilename);
             Image img = pdfUtility.getPDFLogo(logoBase64);
             img.setHeight(50f);
 
-            logoFilename = "nachLogo.png";
-            String nachLogoBase64 = pdfUtility.getImageAsBase64(PdfConstant.commonPdfImgUrl+logoFilename);
+            logoFilename = jsonUtility.getJsonKeyValue("nachLogo", imagesJson);
+            String nachLogoBase64 = pdfUtility.getImageAsBase64(logoFilename);
             Image nachLogo = pdfUtility.getPDFLogo(nachLogoBase64);
             nachLogo.setHeight(20F);
 
-            logoFilename="rupee.png";
-            String rupeeBase64 = pdfUtility.getImageAsBase64(PdfConstant.commonPdfImgUrl+logoFilename);
+            logoFilename = jsonUtility.getJsonKeyValue("rupee", imagesJson);
+            String rupeeBase64 = pdfUtility.getImageAsBase64(logoFilename);
             Image rupeeLogo = pdfUtility.getPDFLogo(rupeeBase64);
 
-//            logoFilename="Check.png";
-//            String checkBase64 = pdfUtility.getImageAsBase64(PdfConstant.commonPdfImgUrl+logoFilename);
-//            Image imgChecked = pdfUtility.getPDFLogo(checkBase64).setHeight(8).setWidth(8);
-
-            String checkedLogo = "checked_2_20x21.png";
-            String imgCheckBase64 = pdfUtility.getImageAsBase64(PdfConstant.commonPdfImgUrl+checkedLogo);
-            String uncheckedLogo = "unchecked_20x21.png";
-            String imgUncheckBase64 = pdfUtility.getImageAsBase64(PdfConstant.commonPdfImgUrl+uncheckedLogo);
+            String checkedLogo = jsonUtility.getJsonKeyValue("checkedLogo", imagesJson);
+            String imgCheckBase64 = pdfUtility.getImageAsBase64(checkedLogo);
+            String uncheckedLogo = jsonUtility.getJsonKeyValue("uncheckedLogo", imagesJson);
+            String imgUncheckBase64 = pdfUtility.getImageAsBase64(uncheckedLogo);
 
             Image img1 = pdfUtility.getPDFLogo(logoBase64);
             Image imgChecked = pdfUtility.getCheckedImage(imgCheckBase64);
             Image imgUnchecked = pdfUtility.getUncheckedImage(imgUncheckBase64);
 
-//            logoFilename="uncheck.png";
-//            String uncheckBase64 = pdfUtility.getImageAsBase64(PdfConstant.commonPdfImgUrl+logoFilename);
-//            Image imgUnchecked = pdfUtility.getPDFLogo(uncheckBase64).setHeight(8).setWidth(8);
-
-            logoFilename="Tick.png";
-            String tickBase64 = pdfUtility.getImageAsBase64(PdfConstant.commonPdfImgUrl+logoFilename);
+            logoFilename = jsonUtility.getJsonKeyValue("tick", imagesJson);
+            String tickBase64 = pdfUtility.getImageAsBase64(logoFilename);
             Image tickImg = pdfUtility.getPDFLogo(tickBase64).setHeight(8).setWidth(8);
 
             //PdfDocument pdf = new PdfDocument(writer);

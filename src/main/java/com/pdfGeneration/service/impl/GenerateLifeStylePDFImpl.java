@@ -12,7 +12,6 @@ import com.itextpdf.layout.border.Border;
 import com.itextpdf.layout.element.*;
 import com.itextpdf.layout.property.TextAlignment;
 import com.itextpdf.layout.property.VerticalAlignment;
-import com.pdfGeneration.constants.PdfConstant;
 import com.pdfGeneration.service.GenerateLifeStylePDF;
 import com.pdfGeneration.utility.JsonUtility;
 import com.pdfGeneration.utility.PDFUtility;
@@ -41,21 +40,21 @@ public class GenerateLifeStylePDFImpl implements GenerateLifeStylePDF {
 //    private OnlineUtility onlineUtility;
 
     @Override
-    public byte[] generateDivingPDF(String applicationNumber, String nameOfLifeAssured, JsonObject divingObj, boolean isOmniDoc, String placeName, String primaryMobileNo, String countryCode) {
+    public byte[] generateDivingPDF(String applicationNumber, String nameOfLifeAssured, JsonObject divingObj, boolean isOmniDoc, String placeName, String primaryMobileNo, String countryCode, JsonObject imagesJson) {
         ByteArrayOutputStream baos = new ByteArrayOutputStream();
         byte[] bytesPdf = null;
         try (PdfWriter writer = new PdfWriter(baos)) {
             PdfDocument pdfDoc = new PdfDocument(writer);
             pdfDoc.addNewPage();
 
-            String logoFilename = "diving.png";
-            String logoBase64 =  pdfUtility.getImageAsBase64(PdfConstant.commonPdfImgUrl + logoFilename);
+            String logoFilename = jsonUtility.getJsonKeyValue("logo", imagesJson);
+            String logoBase64 =  pdfUtility.getImageAsBase64(logoFilename);
             Image img = pdfUtility.getPDFLogo(logoBase64);
 
-            String checkedLogo = "checked_2_20x21.png";
-            String imgCheckBase64 = pdfUtility.getImageAsBase64(PdfConstant.commonPdfImgUrl + checkedLogo);
-            String uncheckedLogo = "unchecked_20x21.png";
-            String imgUncheckBase64 = pdfUtility.getImageAsBase64(PdfConstant.commonPdfImgUrl + uncheckedLogo);
+            String checkedLogo = jsonUtility.getJsonKeyValue("checkedLogo", imagesJson);
+            String imgCheckBase64 = pdfUtility.getImageAsBase64(checkedLogo);
+            String uncheckedLogo = jsonUtility.getJsonKeyValue("uncheckedLogo", imagesJson);
+            String imgUncheckBase64 = pdfUtility.getImageAsBase64(uncheckedLogo);
 
             Image imgChecked = pdfUtility.getCheckedImage(imgCheckBase64);
 
@@ -455,21 +454,21 @@ public class GenerateLifeStylePDFImpl implements GenerateLifeStylePDF {
     }
 
     @Override
-    public byte[] generateDrivingPDF(String applicationNumber, String nameOfLifeAssured, JsonObject drivingObj, boolean isOmniDoc, String placeName, String primaryMobileNo, String countryCode) {
+    public byte[] generateDrivingPDF(String applicationNumber, String nameOfLifeAssured, JsonObject drivingObj, boolean isOmniDoc, String placeName, String primaryMobileNo, String countryCode, JsonObject imagesJson) {
         ByteArrayOutputStream baos = new ByteArrayOutputStream();
         byte[] bytesPdf = null;
         try (PdfWriter writer = new PdfWriter(baos)) {
             PdfDocument pdfDoc = new PdfDocument(writer);
             pdfDoc.addNewPage();
 
-            String logoFilename = "driving.png";
-            String logoBase64 =  pdfUtility.getImageAsBase64(PdfConstant.commonPdfImgUrl + logoFilename);
+            String logoFilename = jsonUtility.getJsonKeyValue("driving", imagesJson);
+            String logoBase64 =  pdfUtility.getImageAsBase64(logoFilename);
             Image img = pdfUtility.getPDFLogo(logoBase64);
 
-            String checkedLogo = "checked_2_20x21.png";
-            String imgCheckBase64 = pdfUtility.getImageAsBase64(PdfConstant.commonPdfImgUrl + checkedLogo);
-            String uncheckedLogo = "unchecked_20x21.png";
-            String imgUncheckBase64 = pdfUtility.getImageAsBase64(PdfConstant.commonPdfImgUrl + uncheckedLogo);
+            String checkedLogo = jsonUtility.getJsonKeyValue("checkedLogo", imagesJson);
+            String imgCheckBase64 = pdfUtility.getImageAsBase64(checkedLogo);
+            String uncheckedLogo = jsonUtility.getJsonKeyValue("uncheckedLogo", imagesJson);
+            String imgUncheckBase64 = pdfUtility.getImageAsBase64(uncheckedLogo);
 
             Image imgChecked = pdfUtility.getCheckedImage(imgCheckBase64);
 
@@ -728,21 +727,21 @@ public class GenerateLifeStylePDFImpl implements GenerateLifeStylePDF {
     }
 
     @Override
-    public byte[] generateAviationPDF(String applicationNumber, String nameOfLifeAssured, JsonObject aviationObj, boolean isOmniDoc, String placeName, String primaryMobileNo, String countryCode) {
+    public byte[] generateAviationPDF(String applicationNumber, String nameOfLifeAssured, JsonObject aviationObj, boolean isOmniDoc, String placeName, String primaryMobileNo, String countryCode, JsonObject imagesJson) {
         ByteArrayOutputStream baos = new ByteArrayOutputStream();
         byte[] bytesPdf = null;
         try (PdfWriter writer = new PdfWriter(baos)) {
             PdfDocument pdfDoc = new PdfDocument(writer);
             pdfDoc.addNewPage();
 
-            String logoFilename = "aviation.png";
-            String logoBase64 =  pdfUtility.getImageAsBase64(PdfConstant.commonPdfImgUrl + logoFilename);
+            String logoFilename = jsonUtility.getJsonKeyValue("aviation", imagesJson);
+            String logoBase64 =  pdfUtility.getImageAsBase64(logoFilename);
             Image img = pdfUtility.getPDFLogo(logoBase64);
 
-            String checkedLogo = "checked_2_20x21.png";
-            String imgCheckBase64 = pdfUtility.getImageAsBase64(PdfConstant.commonPdfImgUrl + checkedLogo);
-            String uncheckedLogo = "unchecked_20x21.png";
-            String imgUncheckBase64 = pdfUtility.getImageAsBase64(PdfConstant.commonPdfImgUrl + uncheckedLogo);
+            String checkedLogo = jsonUtility.getJsonKeyValue("checkedLogo", imagesJson);
+            String imgCheckBase64 = pdfUtility.getImageAsBase64(checkedLogo);
+            String uncheckedLogo = jsonUtility.getJsonKeyValue("uncheckedLogo", imagesJson);
+            String imgUncheckBase64 = pdfUtility.getImageAsBase64(uncheckedLogo);
 
             Image imgChecked = pdfUtility.getCheckedImage(imgCheckBase64);
 
@@ -1095,21 +1094,21 @@ public class GenerateLifeStylePDFImpl implements GenerateLifeStylePDF {
     }
 
     @Override
-    public byte[] generateFishingPDF(String applicationNumber, String nameOfLifeAssured, JsonObject fishingObj, boolean isOmniDoc, String placeName, String primaryMobileNo, String countryCode) {
+    public byte[] generateFishingPDF(String applicationNumber, String nameOfLifeAssured, JsonObject fishingObj, boolean isOmniDoc, String placeName, String primaryMobileNo, String countryCode, JsonObject imagesJson) {
         ByteArrayOutputStream baos = new ByteArrayOutputStream();
         byte[] bytesPdf = null;
         try (PdfWriter writer = new PdfWriter(baos)) {
             PdfDocument pdfDoc = new PdfDocument(writer);
             pdfDoc.addNewPage();
 
-            String logoFilename = "fishing.png";
-            String logoBase64 =  pdfUtility.getImageAsBase64(PdfConstant.commonPdfImgUrl + logoFilename);
+            String logoFilename = jsonUtility.getJsonKeyValue("fishing", imagesJson);
+            String logoBase64 =  pdfUtility.getImageAsBase64(logoFilename);
             Image img = pdfUtility.getPDFLogo(logoBase64);
 
-            String checkedLogo = "checked_2_20x21.png";
-            String imgCheckBase64 = pdfUtility.getImageAsBase64(PdfConstant.commonPdfImgUrl + checkedLogo);
-            String uncheckedLogo = "unchecked_20x21.png";
-            String imgUncheckBase64 = pdfUtility.getImageAsBase64(PdfConstant.commonPdfImgUrl + uncheckedLogo);
+            String checkedLogo = jsonUtility.getJsonKeyValue("checkedLogo", imagesJson);
+            String imgCheckBase64 = pdfUtility.getImageAsBase64(checkedLogo);
+            String uncheckedLogo = jsonUtility.getJsonKeyValue("uncheckedLogo", imagesJson);
+            String imgUncheckBase64 = pdfUtility.getImageAsBase64(uncheckedLogo);
 
             Image imgChecked = pdfUtility.getCheckedImage(imgCheckBase64);
 
@@ -1355,21 +1354,21 @@ public class GenerateLifeStylePDFImpl implements GenerateLifeStylePDF {
     }
 
     @Override
-    public byte[] generateOccupationPDF(String applicationNumber, String nameOfLifeAssured, JsonObject occupationalObj, boolean isOmniDoc, String placeName, String primaryMobileNo, String countryCode) {
+    public byte[] generateOccupationPDF(String applicationNumber, String nameOfLifeAssured, JsonObject occupationalObj, boolean isOmniDoc, String placeName, String primaryMobileNo, String countryCode, JsonObject imagesJson) {
         ByteArrayOutputStream baos = new ByteArrayOutputStream();
         byte[] bytesPdf = null;
         try (PdfWriter writer = new PdfWriter(baos)) {
             PdfDocument pdfDoc = new PdfDocument(writer);
             pdfDoc.addNewPage();
 
-            String logoFilename = "occupation.png";
-            String logoBase64 =  pdfUtility.getImageAsBase64(PdfConstant.commonPdfImgUrl + logoFilename);
+            String logoFilename = jsonUtility.getJsonKeyValue("occupation", imagesJson);
+            String logoBase64 =  pdfUtility.getImageAsBase64(logoFilename);
             Image img = pdfUtility.getPDFLogo(logoBase64);
 
-            String checkedLogo = "checked_2_20x21.png";
-            String imgCheckBase64 = pdfUtility.getImageAsBase64(PdfConstant.commonPdfImgUrl + checkedLogo);
-            String uncheckedLogo = "unchecked_20x21.png";
-            String imgUncheckBase64 = pdfUtility.getImageAsBase64(PdfConstant.commonPdfImgUrl + uncheckedLogo);
+            String checkedLogo = jsonUtility.getJsonKeyValue("checkedLogo", imagesJson);
+            String imgCheckBase64 = pdfUtility.getImageAsBase64(checkedLogo);
+            String uncheckedLogo = jsonUtility.getJsonKeyValue("uncheckedLogo", imagesJson);
+            String imgUncheckBase64 = pdfUtility.getImageAsBase64(uncheckedLogo);
 
             Image imgChecked = pdfUtility.getCheckedImage(imgCheckBase64);
 
@@ -1745,21 +1744,21 @@ public class GenerateLifeStylePDFImpl implements GenerateLifeStylePDF {
     }
 
     @Override
-    public byte[] generateMiningPDF(String applicationNumber, String nameOfLifeAssured, JsonObject miningObj, boolean isOmniDoc, String placeName, String primaryMobileNo, String countryCode) {
+    public byte[] generateMiningPDF(String applicationNumber, String nameOfLifeAssured, JsonObject miningObj, boolean isOmniDoc, String placeName, String primaryMobileNo, String countryCode, JsonObject imagesJson) {
         ByteArrayOutputStream baos = new ByteArrayOutputStream();
         byte[] bytesPdf = null;
         try (PdfWriter writer = new PdfWriter(baos)) {
             PdfDocument pdfDoc = new PdfDocument(writer);
             pdfDoc.addNewPage();
 
-            String logoFilename = "mining.png";
-            String logoBase64 =  pdfUtility.getImageAsBase64(PdfConstant.commonPdfImgUrl + logoFilename);
+            String logoFilename = jsonUtility.getJsonKeyValue("mining", imagesJson);
+            String logoBase64 =  pdfUtility.getImageAsBase64(logoFilename);
             Image img = pdfUtility.getPDFLogo(logoBase64);
 
-            String checkedLogo = "checked_2_20x21.png";
-            String imgCheckBase64 = pdfUtility.getImageAsBase64(PdfConstant.commonPdfImgUrl + checkedLogo);
-            String uncheckedLogo = "unchecked_20x21.png";
-            String imgUncheckBase64 = pdfUtility.getImageAsBase64(PdfConstant.commonPdfImgUrl + uncheckedLogo);
+            String checkedLogo = jsonUtility.getJsonKeyValue("checkedLogo", imagesJson);
+            String imgCheckBase64 = pdfUtility.getImageAsBase64(checkedLogo);
+            String uncheckedLogo = jsonUtility.getJsonKeyValue("uncheckedLogo", imagesJson);
+            String imgUncheckBase64 = pdfUtility.getImageAsBase64(uncheckedLogo);
 
             Image imgChecked = pdfUtility.getCheckedImage(imgCheckBase64);
 
@@ -2285,21 +2284,21 @@ public class GenerateLifeStylePDFImpl implements GenerateLifeStylePDF {
     }
 
     @Override
-    public byte[] generateOilRefineryPDF(String applicationNumber, String nameOfLifeAssured, JsonObject oilRefineryObj, boolean isOmniDoc, String placeName, String primaryMobileNo, String countryCode) {
+    public byte[] generateOilRefineryPDF(String applicationNumber, String nameOfLifeAssured, JsonObject oilRefineryObj, boolean isOmniDoc, String placeName, String primaryMobileNo, String countryCode, JsonObject imagesJson) {
         ByteArrayOutputStream baos = new ByteArrayOutputStream();
         byte[] bytesPdf = null;
         try (PdfWriter writer = new PdfWriter(baos)) {
             PdfDocument pdfDoc = new PdfDocument(writer);
             pdfDoc.addNewPage();
 
-            String logoFilename = "oil.png";
-            String logoBase64 =  pdfUtility.getImageAsBase64(PdfConstant.commonPdfImgUrl + logoFilename);
+            String logoFilename = jsonUtility.getJsonKeyValue("oil", imagesJson);
+            String logoBase64 =  pdfUtility.getImageAsBase64(logoFilename);
             Image img = pdfUtility.getPDFLogo(logoBase64);
 
-            String checkedLogo = "checked_2_20x21.png";
-            String imgCheckBase64 = pdfUtility.getImageAsBase64(PdfConstant.commonPdfImgUrl + checkedLogo);
-            String uncheckedLogo = "unchecked_20x21.png";
-            String imgUncheckBase64 = pdfUtility.getImageAsBase64(PdfConstant.commonPdfImgUrl + uncheckedLogo);
+            String checkedLogo = jsonUtility.getJsonKeyValue("checkedLogo", imagesJson);
+            String imgCheckBase64 = pdfUtility.getImageAsBase64(checkedLogo);
+            String uncheckedLogo = jsonUtility.getJsonKeyValue("uncheckedLogo", imagesJson);
+            String imgUncheckBase64 = pdfUtility.getImageAsBase64(uncheckedLogo);
 
             Image imgChecked = pdfUtility.getCheckedImage(imgCheckBase64);
 
@@ -2655,7 +2654,7 @@ public class GenerateLifeStylePDFImpl implements GenerateLifeStylePDF {
     }
 
     @Override
-    public byte[] generateArmedForcesPDF(String applicationNumber, String nameOfLifeAssured, JsonObject armObj, boolean isOmniDoc, String placeName, String primaryMobileNo, String countryCode) {
+    public byte[] generateArmedForcesPDF(String applicationNumber, String nameOfLifeAssured, JsonObject armObj, boolean isOmniDoc, String placeName, String primaryMobileNo, String countryCode, JsonObject imagesJson) {
 
         ByteArrayOutputStream baos = new ByteArrayOutputStream();
         byte[] bytesPdf = null;
@@ -2663,14 +2662,14 @@ public class GenerateLifeStylePDFImpl implements GenerateLifeStylePDF {
         try (PdfWriter writer = new PdfWriter(baos)) {
             PdfDocument pdfDoc = new PdfDocument(writer);
             pdfDoc.addNewPage();
-            String logoFilename = "armedforces.png";
-            String logoBase64 =  pdfUtility.getImageAsBase64(PdfConstant.commonPdfImgUrl + logoFilename);
+            String logoFilename = jsonUtility.getJsonKeyValue("armedforces", imagesJson);
+            String logoBase64 =  pdfUtility.getImageAsBase64(logoFilename);
             Image img = pdfUtility.getPDFLogo(logoBase64);
 
-            String checkedLogo = "checked_2_20x21.png";
-            String imgCheckBase64 = pdfUtility.getImageAsBase64(PdfConstant.commonPdfImgUrl + checkedLogo);
-            String uncheckedLogo = "unchecked_20x21.png";
-            String imgUncheckBase64 = pdfUtility.getImageAsBase64(PdfConstant.commonPdfImgUrl + uncheckedLogo);
+            String checkedLogo = jsonUtility.getJsonKeyValue("checkedLogo", imagesJson);
+            String imgCheckBase64 = pdfUtility.getImageAsBase64(checkedLogo);
+            String uncheckedLogo = jsonUtility.getJsonKeyValue("uncheckedLogo", imagesJson);
+            String imgUncheckBase64 = pdfUtility.getImageAsBase64(uncheckedLogo);
 
             Image imgChecked = pdfUtility.getCheckedImage(imgCheckBase64);
 
@@ -2931,20 +2930,20 @@ public class GenerateLifeStylePDFImpl implements GenerateLifeStylePDF {
     }
 
     @Override
-    public byte[] generateMarinePDF(String applicationNumber, String nameOfLifeAssured, JsonObject marineObj, boolean isOmniDoc, String placeName, String primaryMobileNo, String countryCode) {
+    public byte[] generateMarinePDF(String applicationNumber, String nameOfLifeAssured, JsonObject marineObj, boolean isOmniDoc, String placeName, String primaryMobileNo, String countryCode, JsonObject imagesJson) {
         ByteArrayOutputStream baos = new ByteArrayOutputStream();
         byte[] bytesPdf = null;
         try (PdfWriter writer = new PdfWriter(baos)) {
             PdfDocument pdfDoc = new PdfDocument(writer);
             pdfDoc.addNewPage();
-            String logoFilename = "marine.png";
-            String logoBase64 =  pdfUtility.getImageAsBase64(PdfConstant.commonPdfImgUrl + logoFilename);
+            String logoFilename = jsonUtility.getJsonKeyValue("marine", imagesJson);
+            String logoBase64 =  pdfUtility.getImageAsBase64(logoFilename);
             Image img = pdfUtility.getPDFLogo(logoBase64);
 
-            String checkedLogo = "checked_2_20x21.png";
-            String imgCheckBase64 = pdfUtility.getImageAsBase64(PdfConstant.commonPdfImgUrl + checkedLogo);
-            String uncheckedLogo = "unchecked_20x21.png";
-            String imgUncheckBase64 = pdfUtility.getImageAsBase64(PdfConstant.commonPdfImgUrl + uncheckedLogo);
+            String checkedLogo = jsonUtility.getJsonKeyValue("checkedLogo", imagesJson);
+            String imgCheckBase64 = pdfUtility.getImageAsBase64(checkedLogo);
+            String uncheckedLogo = jsonUtility.getJsonKeyValue("uncheckedLogo", imagesJson);
+            String imgUncheckBase64 = pdfUtility.getImageAsBase64(uncheckedLogo);
 
             Image imgChecked = pdfUtility.getCheckedImage(imgCheckBase64);
 
@@ -3410,4 +3409,4 @@ public class GenerateLifeStylePDFImpl implements GenerateLifeStylePDF {
 
     }
 
-}
+    }

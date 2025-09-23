@@ -22,7 +22,6 @@ import com.itextpdf.layout.property.FontKerning;
 import com.itextpdf.layout.property.HorizontalAlignment;
 import com.itextpdf.layout.property.TextAlignment;
 import com.itextpdf.layout.property.UnitValue;
-import com.pdfGeneration.constants.PdfConstant;
 import com.pdfGeneration.service.GiftCityPdfService;
 import com.pdfGeneration.utility.JsonUtility;
 import com.pdfGeneration.utility.PDFUtility;
@@ -88,6 +87,8 @@ public class GiftCityPdfServiceImpl implements GiftCityPdfService {
             JsonObject paymentDetailObj = jsonUtility.getJsonObjectByKey("payment",userData);
             logger.info("Payment details object:{}", paymentDetailObj);
 
+            JsonObject contentJson = jsonUtility.getJsonObjectByKey("content",userData);
+
             JsonObject policyHolderBasicDetailObj = jsonUtility.getJsonObjectByKey("policyHolder", basicDetailObj);
             JsonObject insuredPersonBasicDetailObj = jsonUtility.getJsonObjectByKey("insuredPerson", basicDetailObj);
             String buyFor = jsonUtility.getJsonKeyValue("buyFor", policyHolderBasicDetailObj);
@@ -113,10 +114,14 @@ public class GiftCityPdfServiceImpl implements GiftCityPdfService {
             PdfWriter writer = new PdfWriter(baos);
             PdfDocument pdfDoc = new PdfDocument(writer);
             ////////////////////
+            JsonObject metadataObj = jsonUtility.getJsonObjectByKey("metadata",userData);
+            String author = jsonUtility.getJsonKeyValue("author", metadataObj);
+            String creator = jsonUtility.getJsonKeyValue("creator", metadataObj);
+            String title = jsonUtility.getJsonKeyValue("title", metadataObj);
             PdfDocumentInfo pdfDocumentInfo=pdfDoc.getDocumentInfo();
-            pdfDocumentInfo.setAuthor("IndiaFirstLife");
-            pdfDocumentInfo.setCreator("DEPT");
-            pdfDocumentInfo.setTitle("Gift City Application Form");
+            pdfDocumentInfo.setAuthor(author);
+            pdfDocumentInfo.setCreator(creator);
+            pdfDocumentInfo.setTitle(title);
             pdfDocumentInfo.addCreationDate();
 
             PdfFont font = PdfFontFactory.createFont(FontConstants.HELVETICA);
@@ -125,8 +130,9 @@ public class GiftCityPdfServiceImpl implements GiftCityPdfService {
             document.setFontKerning(FontKerning.YES);
             document.setMargins(0F, 0f, 0f, 0f);
 
-            String logoFilename = "whatsappLogo.png";
-            String logoBase64 = pdfUtility.getImageAsBase64(PdfConstant.commonPdfImgUrl+logoFilename);
+            JsonObject imagesJson = jsonUtility.getJsonObjectByKey("images", userData);
+            String logoFilename = jsonUtility.getJsonKeyValue("whatsappLogo", imagesJson);
+            String logoBase64 = pdfUtility.getImageAsBase64(logoFilename);
             Image img = pdfUtility.getPDFLogo(logoBase64);
             img.setHeight(80);
             img.setWidth(120);
@@ -144,7 +150,7 @@ public class GiftCityPdfServiceImpl implements GiftCityPdfService {
 
             Cell headingCell = new Cell();
             headingCell.setBackgroundColor(new DeviceRgb(128, 0, 0), 100);
-            p = new Paragraph("Proposal Form - IndiaFirst Life Wealth Wise Plan (UIN - 007L001V01)");
+            p = new Paragraph(jsonUtility.getJsonKeyValue("heading", contentJson));
             p.setBold();
             p.setFontKerning(FontKerning.YES);
             p.setFontColor(Color.WHITE);
@@ -153,7 +159,7 @@ public class GiftCityPdfServiceImpl implements GiftCityPdfService {
             headingCell.setMarginTop(15);
             table.addCell(headingCell);
 
-            p = new Paragraph(new Text("UNDER UNIT LINKED INSURANCE PLANS, INVESTMENT RISK IN INVESTMENT PORTFOLIO IS BORNE BY THE POLICYHOLDER.").setBold());
+            p = new Paragraph(new Text(jsonUtility.getJsonKeyValue("disclaimer", contentJson)).setBold());
             p.setMarginTop(10);
             table.addCell(new Cell().add(p).setBorder(Border.NO_BORDER));
 
@@ -752,8 +758,7 @@ public class GiftCityPdfServiceImpl implements GiftCityPdfService {
             paymentModeDetails.addCell(new Cell(1, 2).add(new Paragraph("Customer’s Name as per the Bank Account :").setBold()).setBorder(Border.NO_BORDER));
             paymentModeDetails.addCell(new Cell(1, 6).add(new Paragraph(customerName)).setBorder(Border.NO_BORDER));
             p = new Paragraph(new Text("Disclaimer: ").setBold());
-            p.add("In case of non credit to my bank account with/without assigning any reasons thereof or if the transaction is delayed or not credited at all for reasons of incomplete/incorrect information, I will not hold IndiaFirst " +
-                    "Life Insurance Co. Ltd. responsible. Further, the Company reserves the right to use any alternative payout option including demand draft/payable at par cheque in spite of opting for the direct credit option.");
+            p.add(jsonUtility.getJsonKeyValue("desc1", contentJson));
             paymentModeDetails.addCell(new Cell(1, 6).add(p).setBorder(Border.NO_BORDER));
             table.addCell(new Cell().add(paymentModeDetails).setBorder(Border.NO_BORDER));
 
@@ -812,33 +817,19 @@ public class GiftCityPdfServiceImpl implements GiftCityPdfService {
             headingCell.setMarginTop(15);
             table.addCell(headingCell);
 
-            p = new Paragraph("I /we have understood the questions in the proposal form and I /we have answered them truthfully, completely and correctly. I /we further declare thatI /we have not withheld any material fact or information which may affect " +
-                    "the decision of IndiaFirst Life Insurance Company Limited (Hereafter called the \"Company\" ) in underwriting the risk, and the information provided by me / us in the proposal form, the supplementary documents and " +
-                    "information provided to the medical examiner in case of being medically examined will form the basis of the contract between me/us and the Company and in case of fraud and suppression of material facts the policy contract " +
-                    "shall be treated in accordance with the Sec 45 of Insurance Act, 1938 as amended from time to time. I /we hereby authorize and direct any doctor, hospital, or employer (past and present) to disclose to the Company any " +
-                    "information relating to my present state of health, past health history and nature of work performed by me / us. I /we further agree that if after the date of submission of the proposal but before the issuance of policy (i) there is " +
-                    "an adverse change in my / us occupation, financial condition, health condition which will affect the decision of the Company in underwriting risk or (ii) if a proposal for assurance or an application for revival of the policy on " +
-                    "my / our life orthe life to be assured made to any insurer is withdrawn or dropped, deferred, declined or accepted at an increased premium or subject to a lien or on terms other than as proposed, I /we shall forthwith intimate " +
-                    "the same to the Company in writing. Failure to do this on my / our part shall amount to a breach of my/our undertaking and the policy will be dealt in accordance with section 45 of the Insurance Act, 1938 as amended from " +
-                    "time to time. I /we understand that the cover applied for under this application will commence after approval of my application and receipt of the required premium by the Company. I / we, hereby declare that the premium " +
-                    "have not been generated from proceeds of any criminal activities / offences listed in the Prevention of Money Laundering Act 2002 or under any other applicable law. I understand that incase of withdrawal of this application " +
-                    "by me post undergoing medicals or part thereof, the Company shall return the premium deposit after deducting the expense incurred on the medical test / examination, if any.");
+            p = new Paragraph(jsonUtility.getJsonKeyValue("consent1", contentJson));
             p.add("\n");
-            p.add(new Text("I hereby give my consent to the Company to carry out due diligence in respect of information, as provided by me in the proposal form, including AML-eKYC verification, and also to store/share the " +
-                    "data/information with government agencies/ statutory authorities/ entities as authorized by the regulator – for necessary verification purposes and/or policy servicing purpose.\n" +
-                    "\"I/We hereby give consent to the Company for obtaining/ downloading CKYC record from Central KYC Records Registry. I/We hereby give consent to the Company for obtaining/downloading KYC details/from " +
-                    "government agencies/ entities as authorized by the regulator/ statutory authorities like Passport Seva, Parivahan Sewa, Election Commission of India\".").setBold());
-            p.add(new Text("NRI/PIO declaration: ").setBold());
-            p.add("By providing consent through OTP on the application form I hereby confirm that NRI/PIO details provided by me / us in the questionnaire are correct and to the best of my knowledge. By feeding in " +
-                    "the said number in the system, you hereby acknowledge the above declaration in its entirety and the same would create a legally binding agreement between the Company and You.\n");
-            p.add(new Text("Digital Policy Document declaration: ").setBold());
-            p.add("I/We hereby give my consent to receive all communications and policy documents via digital means, including but not limited to Email, SMS and WhatsApp messages.");
+            p.add(new Text(jsonUtility.getJsonKeyValue("consent2", contentJson))).setBold();
+            p.add(new Text(jsonUtility.getJsonKeyValue("declarationHeading1", contentJson))).setBold();
+            p.add(jsonUtility.getJsonKeyValue("declarationContent1", contentJson)));
+            p.add(new Text(jsonUtility.getJsonKeyValue("declarationHeading2", contentJson)).setBold());
+            p.add(jsonUtility.getJsonKeyValue("declarationContent2", contentJson));
             table.addCell(new Cell().add(p).setBorder(Border.NO_BORDER));
 
 
             p = new Paragraph("\n\n__________________________________________");
-            p.add("\nLife to be Assured’s Signature or Thumb Impression");
-            p.add("\n(Not applicable in case of minor lives)");
+            p.add(jsonUtility.getJsonKeyValue("declarationHeading3", contentJson));
+            p.add(jsonUtility.getJsonKeyValue("declarationHeading4", contentJson));
             p.add("\n\n");
             table.addCell(new Cell().add(p).setBorder(Border.NO_BORDER));
 
@@ -950,8 +941,8 @@ public class GiftCityPdfServiceImpl implements GiftCityPdfService {
 
             Table grandFooterTable = new Table(1);
             grandFooterTable.setTextAlignment(TextAlignment.CENTER);
-            Paragraph companyText = new Paragraph(new Text("IndiaFirst Life Insurance Company Ltd.,").setBold());
-            companyText.add(new Text("\nBlock 13B, Signature building, Gift City SEZ, Gandhinagar, Gujarat, 382355."));
+            Paragraph companyText = new Paragraph(new Text(jsonUtility.getJsonKeyValue("signature", contentJson)).setBold());
+            companyText.add(new Text(jsonUtility.getJsonKeyValue("addr", contentJson))));
             grandFooterTable.addCell(companyText).setTextAlignment(TextAlignment.CENTER);
             grandFooterTable.setWidth(UnitValue.createPercentValue(100));
             pdfDoc.getDefaultPageSize();
@@ -982,16 +973,15 @@ public class GiftCityPdfServiceImpl implements GiftCityPdfService {
             table.addCell(new Cell().add(p).setBorder(Border.NO_BORDER));
 
             p = new Paragraph(new Text("\nNote: ").setBold());
-            p.add("The information in this section is being collected because of enhancements to IndiaFirst Life Insurance’s new policy issuance procedures in order to fully comply with Foreign Account Tax Compliance Act (FATCA) " +
-                    "requirements and the Common Reporting Standards (CRS) requirements pursuant to amendments made to Income- tax Act,1961 read with Income-Tax Rules, 1962.\n");
-            p.add("\nSelf-Attested Address and ID Proof of Policyholder is mandatory document to be enclosed.\n");
-            p.add(new Text("For more information refer :-").setBold());
+            p.add(jsonUtility.getJsonKeyValue("footerContent1", contentJson));
+            p.add(jsonUtility.getJsonKeyValue("footerContent2", contentJson));
+            p.add(new Text(jsonUtility.getJsonKeyValue("footerContent3", contentJson)).setBold());
             p.add("\n");
-            p.add("http://www.incometaxindia.gov.in/dtaa/other%20agreements/india_iga_final- _india_english.pdf");
+            p.add(jsonUtility.getJsonKeyValue("footerLink1", contentJson));
             p.add("\n");
-            p.add("http://www.oecd.org/ctp/exchange-of-tax-information/automatic-exchange-financial-account-information-common-reporting-standard.pdf");
+            p.add(jsonUtility.getJsonKeyValue("footerLink2", contentJson));
             p.add("\n");
-            p.add("We are unable to provide advice about your tax residency. If you have any questions about your tax residency, please contact your tax advisor)");
+            p.add(jsonUtility.getJsonKeyValue("footerLink4", contentJson));
             table.addCell(new Cell().add(p).setBorder(Border.NO_BORDER));
 
 
@@ -1204,27 +1194,21 @@ public class GiftCityPdfServiceImpl implements GiftCityPdfService {
             table.addCell(new Cell().add(fatcaDetails).setBorder(Border.NO_BORDER));
 
             p = new Paragraph(new Text("\nNote :- ").setBold());
-            p.add("Please use multiple forms incase of multiple life assured or multiple nominees");
+            p.add(jsonUtility.getJsonKeyValue("desc2", contentJson));
             table.addCell(new Cell().add(p).setBorder(Border.NO_BORDER));
             p = new Paragraph("\n");
-            p.add("*US Person: In case of individuals, US Person means a citizen or resident of the United States. Persons who would qualify as USPersons could be Born in the United States, Born outside the United States of a US parent, " +
-                    "Naturalized citizens, Green Card Holders, Tax residents. [Please note that above information is provided only for quick reference to customers. Please consult your tax/legal advisor for details]");
+            p.add(jsonUtility.getJsonKeyValue("desc2", contentJson));
             table.addCell(new Cell().add(p).setBorder(Border.NO_BORDER));
             p = new Paragraph("\n");
-            p.add("I / We confirm that above details provided by me / us are correct and to the best of my knowledge. I / We also confirm that I / We will report any change in my/our tax status in future to IndiaFirst Life Insurance within 30 days of " +
-                    "such change. I acknowledge that towards compliance with tax information sharing laws, such as FATCA/CRS, IndiaFirst Life Insurance may be required to seek additional personal, tax and beneficial owner information and certain " +
-                    "certifications and documentation from the account holder. Such information may be sought either at the time of Policy issuance or any time subsequently.");
+            p.add(jsonUtility.getJsonKeyValue("desc3", contentJson));
             table.addCell(new Cell().add(p).setBorder(Border.NO_BORDER));
             p = new Paragraph("\n");
-            p.add("I hereby give consent to IndiaFirst Life Insurance to share with any regulatory body my information such as contact details, tax identification number / social security number, account balances / activities or any transactions " +
-                    "undertaken with IndiaFirst Life Insurance.");
+            p.add(jsonUtility.getJsonKeyValue("desc4", contentJson));
             table.addCell(new Cell().add(p).setBorder(Border.NO_BORDER));
             p = new Paragraph("\n");
-            p.add("IndiaFirst Life Insurance may deduct from the moneys payable to me such amount as may be required to comply with any instruction issued by a Government/ Statutory/ Regulatory authority, including, but not limited to, " +
-                    "instructions by Indian Authorities to comply with a foreign law, such as FATCA/CRS.");
+            p.add(jsonUtility.getJsonKeyValue("desc5", contentJson));
             p.add("\n");
-            p.add("I also authorise IndiaFirst Life Insurance to terminate the Policy in the event that appropriate documentation of Insured / Policyholder as may be required by IndiaFirst Life Insurance for the compliance as aforesaid is not timely " +
-                    "provided to IndiaFirst Life Insurance.");
+            p.add(jsonUtility.getJsonKeyValue("desc6", contentJson));
             table.addCell(new Cell().add(p).setBorder(Border.NO_BORDER));
 
             String signatureProposer = "";
@@ -1259,8 +1243,8 @@ public class GiftCityPdfServiceImpl implements GiftCityPdfService {
 
             grandFooterTable = new Table(1);
             grandFooterTable.setTextAlignment(TextAlignment.CENTER);
-            companyText = new Paragraph(new Text("IndiaFirst Life Insurance Company Ltd.,").setBold());
-            companyText.add(new Text("\nBlock 13B, Signature building, Gift City SEZ, Gandhinagar, Gujarat, 382355."));
+            companyText = new Paragraph(new Text(jsonUtility.getJsonKeyValue("signature", contentJson)).setBold());
+            companyText.add(new Text(jsonUtility.getJsonKeyValue("addr", contentJson)));
             grandFooterTable.addCell(companyText).setTextAlignment(TextAlignment.CENTER);
             grandFooterTable.setWidth(UnitValue.createPercentValue(100));
             pdfDoc.getDefaultPageSize();
