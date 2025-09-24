@@ -86,6 +86,7 @@ public class ETermPdfGenerationServiceImpl extends NomineeAddendumPDF implements
             logger.info("Document details object:{}", documentDetailObj);
             JsonObject paymentDetailObj = jsonUtility.getJsonObjectByKey("getPayment", userData);
             logger.info("Payment details object:{}", paymentDetailObj);
+            JsonObject contentJson = jsonUtility.getJsonObjectByKey("content", userData);
 
             String applicationNo = jsonUtility.getJsonKeyValue("applicationNumber", userData);
             boolean isOmniDoc = jsonUtility.getBooleanKeyValue("isOmniDoc", userData);
@@ -280,24 +281,24 @@ public class ETermPdfGenerationServiceImpl extends NomineeAddendumPDF implements
             }
 
             Cell others = new Cell(1, 4);
-            p = new Paragraph(new Text("Bancassurance/ Agency/ Broker/ Corporate Agency/ Direct Sales/ Marketing Associate, Any Others (pls specify): ").setFontSize(6f));
+            p = new Paragraph(new Text(jsonUtility.getJsonKeyValue("content1", contentJson))).setFontSize(6f);
             p.add(new Text("Direct Sales").setFontSize(6f).setBold().setUnderline());
             others.add(p);
             others.setBorder(Border.NO_BORDER);
             firstBlockRight.addCell(others);
 
-            p = new Paragraph("Important Guidelines:1.This form is to be filled by the proposer in BLOCKLETTERS in black/blue ink or to be filled electronically and leave a space blank between each part " + "of the name. 2. If the Proposer/ Life to beAssured is unable to fill the form due to inability to read or understand the language,the help of a person other than the advisor/ " + "our employee/insurance intermediary may be used.(Refer to declaration for signing in vernacular language or for uneducated/ illiterate persons) 3. Before filling up the form " + "please read the sales literature to understand the features, benefits, advantages and terms and conditions of the product. 4. If the space provided in the form is not sufficient " + "for providing details, please attach separate sheets signed by the Proposer/ Life to be Assured. 5. All details should be filled completely including email ID, mobile number, " + "etc. 6. If annual premium is equal to Rs. 50000 or more per customer by any mode of payment, a copy of PAN card and if annual premium is equal to or more than Rs.100000 " + "per customer by any mode of payment, income proof document needs to be submitted. 7.Customers are advised not to hand over the premium to IndiaFirst Life insurance " + "advisors to meet the premium dues (including initial premium). Customers are requested to visit the nearest IndiaFirst Life, Bank of Baroda and Union Bank of India branch " + "to deposit the premium directly. Premium payment made to IndiaFirst Life insurance advisors is at the customer’s own risk. 8. Encashment of cheque/ DD does not mean " + "the policy has been approved and the Company reserves the right to call for additional requirements subject to underwriting (if any). 9. While answering questions in the " + "proposal form and providing any other information in respect of the insurance,the Policyholder must make a full and frank disclosure of all material facts with respect to the " + "questions available in proposal form. 10. In case the Proposer and Life to be Assured are two separate individuals,the proposal form will be signed by both.The life to be " + "assured can sign only if he/she is 18 years or above.");
+            p = new Paragraph(jsonUtility.getJsonKeyValue("content2", contentJson));
             firstBlockRight.addCell(new Cell(1, 4).add(p).setMarginTop(10).setMarginBottom(10).setBorder(Border.NO_BORDER));
             firstBlockTable.addCell(new Cell().add(firstBlockRight).setBorder(Border.NO_BORDER));
             table.addCell(new Cell().add(firstBlockTable).setBorder(Border.NO_BORDER));
 
-            JsonObject indiaFirstStaffObj = jsonUtility.getJsonObjectByKey("indiaFirstStaff", primaryEmploymentDetailObj);
-            String staffStatus = jsonUtility.getJsonKeyValue("status", indiaFirstStaffObj);
-            String staffEmpCodeNo = jsonUtility.getJsonKeyValue("employeeCode", indiaFirstStaffObj);
+            JsonObject staffObj = jsonUtility.getJsonObjectByKey("staff", primaryEmploymentDetailObj);
+            String staffStatus = jsonUtility.getJsonKeyValue("status", staffObj);
+            String staffEmpCodeNo = jsonUtility.getJsonKeyValue("employeeCode", staffObj);
 
             headingCell = new Cell();
             headingCell.setBackgroundColor(Color.GRAY, 100);
-            p = new Paragraph(new Text("Is the customer an employee of Bank of Baroda, Union Bank of India, eDena, eVijaya, IndiaFirst Life InsuranceCo. Ltd. Or an " + "Individual agent or their family member?   ").setBold());
+            p = new Paragraph(new Text(jsonUtility.getJsonKeyValue("content3", contentJson)).setBold());
             p.setFontKerning(FontKerning.YES);
             p.setFontColor(Color.WHITE);
             Table tableContent = new Table(new float[]{1000F, 250F, 250F, 200F});
@@ -385,7 +386,7 @@ public class ETermPdfGenerationServiceImpl extends NomineeAddendumPDF implements
             }
             proposerDetails.addCell(proposerMergedcell);
 
-            proposerDetails.addCell(new Cell().add("Existing IndiaFirst Policy Owner, Kindly enter policy number / client id").setBorder(Border.NO_BORDER));
+            proposerDetails.addCell(new Cell().add(jsonUtility.getJsonKeyValue("content4", contentJson)).setBorder(Border.NO_BORDER));
             Table innerProposer = new Table(new float[]{120F, 80F, 120F, 180F, 120F, 200F});
             innerProposer.addCell(new Cell().add(imgUnchecked).setBorder(Border.NO_BORDER));
             for (int i = 0; i < policyNo.length(); i++) {
@@ -1414,149 +1415,10 @@ public class ETermPdfGenerationServiceImpl extends NomineeAddendumPDF implements
             lifeAssuredDetails.addCell(proposerMergedcell);
 
             /////////////////////
-            lifeAssuredDetails.addCell(new Cell().add("Existing IndiaFirst Policy Owner, Kindly enter policy number / client id").setBorder(Border.NO_BORDER));
-            //           innerProposer = new Table(new float[]{120F, 80F, 120F, 180F, 120F, 200F});
-//            innerProposer.addCell(new Cell().add(imgUnchecked).setBorder(Border.NO_BORDER));
-//            for (int i = 0; i < policyNo.length(); i++) {
-//                pointColumnWidths[i] = 20F;
-//            }
-//            innerProposer.addCell(new Cell().add("Policy No: ").setBorder(Border.NO_BORDER));
-//            //--
-//            innerProposer.addCell(new Cell().add(imgUnchecked).setBorder(Border.NO_BORDER));
-//            //---
-//            if (policyNo.length() > 0) {
-//                tableCodes = codeTable(policyNo, pointColumnWidths);
-//                innerProposer.addCell(new Cell().add(tableCodes).setBorder(Border.NO_BORDER));
-//            } else {
-//                innerProposer.addCell(new Cell().add(new Paragraph("")).setBorder(Border.NO_BORDER));
-//            }
-//            innerProposer.addCell(new Cell().add(" Client ID: ").setBorder(Border.NO_BORDER));
-//            //--
-////            innerProposer.addCell(new Cell().add(p).setVerticalAlignment(VerticalAlignment.MIDDLE).setBorder(Border.NO_BORDER));
-//            //---
-//            pointColumnWidths = new float[clientId.length()];
-//            for (int i = 0; i < clientId.length(); i++) {
-//                pointColumnWidths[i] = 20F;
-//            }
-//            if (clientId.length() > 0) {
-//                tableCodes = codeTable(clientId, pointColumnWidths).setFontColor(Color.WHITE);
-//                innerProposer.addCell(new Cell().add(tableCodes).setBorder(Border.NO_BORDER));
-//            } else {
-//                innerProposer.addCell(new Cell().add(new Paragraph("")).setBorder(Border.NO_BORDER));
-//            }
+            lifeAssuredDetails.addCell(new Cell().add(jsonUtility.getJsonKeyValue("content5", contentJson)).setBorder(Border.NO_BORDER));
             lifeAssuredDetails.addCell(new Cell().add(innerProposer).setBorder(Border.NO_BORDER));
 
-//            address1 = jsonUtility.getJsonKeyValue("addressline1", secondaryPersonalDetailObj);
-//
-//            if (!address1.isEmpty()) {
-//                if (address1.length() <= 10) {
-//                    address1 += "                                        ";
-//                } else if (address1.length() > 10 && address1.length() <= 20) {
-//                    address1 += "                              ";
-//                } else {
-//                    address1 += "                ";
-//                }
-//            }
-//            address2 = jsonUtility.getJsonKeyValue("addressline2", secondaryPersonalDetailObj);
-//            if (address2.length() > 0) {
-//                if (address2.length() <= 10) {
-//                    address2 += "                                        ";
-//                } else if (address2.length() > 10 && address2.length() <= 20) {
-//                    address2 += "                              ";
-//                } else if (address2.length() > 20 && address2.length() <= 30) {
-//                    address2 += "                  ";
-//                } else if (address2.length() > 30 && address2.length() <= 40) {
-//                    address2 += "           ";
-//                } else {
-//                    address2 += "";
-//                }
-//            }
-//            address3 = jsonUtility.getJsonKeyValue("addressline3", secondaryPersonalDetailObj);
-//            if (address3.length() > 0) {
-//                if (address3.length() <= 10) {
-//                    address3 += "                                        ";
-//                } else if (address3.length() > 10 && address3.length() <= 20) {
-//                    address3 += "                              ";
-//                } else {
-//                    address3 += "                     ";
-//                }
-//            }
-//            String landmarkSecondary = jsonUtility.getJsonKeyValue("landmark", secondaryPersonalDetailObj);
-//            if (landmarkSecondary.length()>0) {
-//                if (landmarkSecondary.length() <= 10) {
-//                    landmarkSecondary += "                                        ";
-//                } else if (landmarkSecondary.length() > 10 && landmarkSecondary.length() <= 20) {
-//                    landmarkSecondary += "                              ";
-//                } else {
-//                    landmarkSecondary += "                ";
-//                }
-//            }
-//            String permanentlandmarkSec = jsonUtility.getJsonKeyValue("permanentlandmark", secondaryPersonalDetailObj);            if (landmark.length()>0) {
-//                if (permanentlandmarkSec.length() <= 10) {
-//                    permanentlandmarkSec += "                                        ";
-//                } else if (permanentlandmarkSec.length() > 10 && permanentlandmarkSec.length() <= 20) {
-//                    permanentlandmarkSec += "                              ";
-//                } else {
-//                    permanentlandmarkSec += "                ";
-//                }
-//            }
-//
-//            String secondaryPermanentaddressline1 = jsonUtility.getJsonKeyValue("permanentaddressline1", secondaryPersonalDetailObj);
-//            if (!secondaryPermanentaddressline1.isEmpty()) {
-//                if (secondaryPermanentaddressline1.length() <= 10) {
-//                    secondaryPermanentaddressline1 += "                                        ";
-//                } else if (secondaryPermanentaddressline1.length() > 10 && secondaryPermanentaddressline1.length() <= 20) {
-//                    secondaryPermanentaddressline1 += "                              ";
-//                } else {
-//                    secondaryPermanentaddressline1 += "                ";
-//                }
-//            }
-//            String secondaryPermanentaddressline2 = jsonUtility.getJsonKeyValue("permanentaddressline2", secondaryPersonalDetailObj);
-//            if (secondaryPermanentaddressline2.length() > 0) {
-//                if (secondaryPermanentaddressline2.length() <= 10) {
-//                    secondaryPermanentaddressline2 += "                                        ";
-//                } else if (secondaryPermanentaddressline2.length() > 10 && secondaryPermanentaddressline2.length() <= 20) {
-//                    secondaryPermanentaddressline2 += "                              ";
-//                } else if (secondaryPermanentaddressline2.length() > 20 && secondaryPermanentaddressline2.length() <= 30) {
-//                    secondaryPermanentaddressline2 += "                  ";
-//                } else if (secondaryPermanentaddressline2.length() > 30 && secondaryPermanentaddressline2.length() <= 40) {
-//                    secondaryPermanentaddressline2 += "           ";
-//                } else {
-//                    secondaryPermanentaddressline2 += "";
-//                }
-//            }
-//            String secondaryPermanentaddressline3 = jsonUtility.getJsonKeyValue("permanentaddressline3", secondaryPersonalDetailObj);
-//            if (secondaryPermanentaddressline3.length() > 0) {
-//                if (secondaryPermanentaddressline3.length() <= 10) {
-//                    secondaryPermanentaddressline3 += "                                        ";
-//                } else if (secondaryPermanentaddressline3.length() > 10 && secondaryPermanentaddressline3.length() <= 20) {
-//                    secondaryPermanentaddressline3 += "                              ";
-//                } else {
-//                    secondaryPermanentaddressline3 += "                     ";
-//                }
-//            }
-//            city = jsonUtility.getJsonKeyValue("city", secondaryPersonalDetailObj);
-//            if (city.length() > 0) {
-//                if (city.length() <= 10) {
-//                    city += "                                        ";
-//                } else if (city.length() > 10 && city.length() <= 20) {
-//                    city += "                              ";
-//                } else {
-//                    city += "                     ";
-//                }
-//            }
-//            state = jsonUtility.getJsonKeyValue("state", secondaryPersonalDetailObj);
-//            if (state.length() > 0) {
-//                if (state.length() <= 10) {
-//                    state += "                                        ";
-//                } else if (state.length() > 10 && state.length() <= 20) {
-//                    state += "                              ";
-//                } else {
-//                    state += "                     ";
-//                }
-//            }
-
-            p = new Paragraph("Communication Address of the Life Assured (Address to which policy document will be dispatched)");
+            p = new Paragraph(jsonUtility.getJsonKeyValue("content6", contentJson));
             p.setPaddingBottom(10);
             proposerMergedcell = new Cell(1, 2);
             proposerMergedcell.add(p);
@@ -1976,7 +1838,7 @@ public class ETermPdfGenerationServiceImpl extends NomineeAddendumPDF implements
             planDetails.addCell(new Cell().add(premiumInstallment).setTextAlignment(TextAlignment.CENTER));
             planDetails.addCell(new Cell().add(sumAssured).setTextAlignment(TextAlignment.CENTER));
 
-            planName = "IndiaFirst Term Rider";
+            planName = jsonUtility.getJsonKeyValue("plan1", contentJson);
             planTerm = "";
             premiumPlayingTerm = "";
             premiumInstallment = "0";
@@ -1988,7 +1850,7 @@ public class ETermPdfGenerationServiceImpl extends NomineeAddendumPDF implements
             planDetails.addCell(new Cell().add(premiumInstallment).setTextAlignment(TextAlignment.CENTER));
             planDetails.addCell(new Cell().add(sumAssured).setTextAlignment(TextAlignment.CENTER));
 
-            planName = "IndiaFirst Life Waiver Of Premium Rider";
+            planName = jsonUtility.getJsonKeyValue("plan2", contentJson);
             planTerm = "";
             premiumPlayingTerm = "";
             premiumInstallment = "0";
@@ -2064,21 +1926,21 @@ public class ETermPdfGenerationServiceImpl extends NomineeAddendumPDF implements
             p.add(imgUnchecked);
             table.addCell(new Cell().add(p).setBorder(Border.NO_BORDER));
             p = new Paragraph("Note: ");
-            p.add(new Text("IndiaFirst Term Rider").setBold());
-            p.add(" is applicable for IndiaFirst Maha Jeevan Plan, IndiaFirst Life Long Guaranteed Income Plan & IndiaFirst Life Mahajeevan Plus Plan. ");
-            p.add(new Text("\nIndiaFirst Life Waiver Of Premium Rider").setBold());
-            p.add(" is applicable for IndiaFirst Maha Jeevan Plan, IndiaFirst Life Smart Pay Plan, IndiaFirst Life Long Guaranteed Income Plan, " + "IndiaFirst Life Guaranteed Benefit Plan, IndiaFirst Life Mahajeevan Plus Plan, IndiaFirst Life Fortune Plus Plan & IndiaFirst Life Guarantee Of Life Dreams Plan.");
+            p.add(new Text(jsonUtility.getJsonKeyValue("plan3", contentJson)).setBold());
+            p.add(jsonUtility.getJsonKeyValue("plan4", contentJson));
+            p.add(new Text(jsonUtility.getJsonKeyValue("plan5", contentJson)).setBold());
+            p.add(jsonUtility.getJsonKeyValue("plan6", contentJson));
             table.addCell(new Cell().add(p).setBorder(Border.NO_BORDER));
-            p = new Paragraph("I would like to fund my future premium with the survival benefit –       ");
+            p = new Paragraph(jsonUtility.getJsonKeyValue("content7", contentJson));
             p.add("     Yes     ");
             p.add(imgUnchecked);
             p.add("     No      ");
             p.add(imgUnchecked);
-            p.add("     (Applicable only for IndiaFirst Life Smart Pay Plan & IndiaFirst Life Mahajeevan Plus Plan)");
+            p.add(jsonUtility.getJsonKeyValue("plan2", contentJson));
             table.addCell(new Cell().add(p).setBorder(Border.NO_BORDER));
 
-            p = new Paragraph("(Please select the appropriate option for ");
-            p.add(new Text("IndiaFirst Life Smart Pay Plan, IndiaFirst Life Long Guaranteed Income Plan, IndiaFirst Life Guaranteed Benefit Plan, IndiaFirst Life Mahajeevan Plus Plan & IndiaFirst Life Guarantee Of Life Dreams Plan").setBold());
+            p = new Paragraph(jsonUtility.getJsonKeyValue("content8", contentJson));
+            p.add(new Text(jsonUtility.getJsonKeyValue("content9", contentJson)).setBold());
             p.add(")");
             //table.addCell(new Cell().add(p));
             p.add(new Text("\nDeath Benefit Option         ").setBold());
@@ -2088,29 +1950,12 @@ public class ETermPdfGenerationServiceImpl extends NomineeAddendumPDF implements
             p.add("     Income    ");
             p.add(imgUnchecked);
             p.add("     5 Years    ");
-//            p.add(imgUnchecked);
-//            p.add("     10 Years    ");
-//            p.add(imgUnchecked);
-//            p.add("     15 Years    ");
             table.addCell(new Cell().add(p).setVerticalAlignment(VerticalAlignment.MIDDLE));
-//            p = new Paragraph("For ");
-//            p.add(new Text("IndiaFirst Life Guaranteed Monthly Income Plan").setBold());
-//            p.add(" please choose appropriate Gap Year:");
-//            p.add("     ");
-//            p.add(imgUnchecked);
-//            p.add("     0 Year    ");
-//            p.add(imgUnchecked);
-//            p.add("     3 Year    ");
-//            p.add(imgUnchecked);
-//            p.add("     5 Year    ");
-//            table.addCell(new Cell().add(p).setVerticalAlignment(VerticalAlignment.MIDDLE));
-
             Table champDetails = new Table(1);
-            p = new Paragraph("(Please select the appropriate option for ");
-            p.add(new Text("IndiaFirst Life Little Champ Plan").setBold());
+            p = new Paragraph(jsonUtility.getJsonKeyValue("content10", contentJson));
+            p.add(new Text(jsonUtility.getJsonKeyValue("content11", contentJson)).setBold());
             p.add(")");
             champDetails.addCell(new Cell().add(p).setBorder(Border.NO_BORDER));
-            //table.addCell(new Cell().add(champDetails).setVerticalAlignment(VerticalAlignment.MIDDLE).setBorder(Border.NO_BORDER));
             p = new Paragraph(new Text("Risk Cover Option").setBold());
             p.add("     ");
             p.add(imgUnchecked);
@@ -2145,11 +1990,11 @@ public class ETermPdfGenerationServiceImpl extends NomineeAddendumPDF implements
             table.addCell(new Cell().add(champDetails).setVerticalAlignment(VerticalAlignment.MIDDLE));
 
             champDetails = new Table(1);
-            p = new Paragraph("(Please select the appropriate option for IndiaFirst Life Little Champ Plan,");
-            p.add(new Text("IndiaFirst Life Guaranteed Monthly Income Plan, IndiaFirst Life Smart Pay Plan, IndiaFirst Life Long Guaranteed Income Plan and IndiaFirst " + "Life Guaranteed Benefit Plan").setBold());
+            p = new Paragraph(jsonUtility.getJsonKeyValue("content12", contentJson));
+            p.add(new Text(jsonUtility.getJsonKeyValue("content13", contentJson)).setBold());
             Table newGoldSection = new Table(new float[]{800F, 300F});
-            p = new Paragraph("Select Income Option for ");
-            p.add(new Text("IndiaFirst Life Guarantee Of Life Dreams Plan (").setBold());
+            p = new Paragraph(jsonUtility.getJsonKeyValue("content14", contentJson));
+            p.add(new Text(jsonUtility.getJsonKeyValue("content15", contentJson)).setBold());
             p.add("(select one of the below options)");
             newGoldSection.addCell(new Cell().add(p).setBorder(Border.NO_BORDER));
             p = new Paragraph("Special Date (For 'Save the Date', if opted)");
@@ -2246,7 +2091,7 @@ public class ETermPdfGenerationServiceImpl extends NomineeAddendumPDF implements
             table.addCell(new Cell().add(newGoldSection));
 
             p = new Paragraph("For ");
-            p.add(new Text("IndiaFirst Life Long Guaranteed Income Plan").setBold());
+            p.add(new Text(jsonUtility.getJsonKeyValue("content16", contentJson)).setBold());
             p.add(" please choose appropriate Income Benefit Frequency");
             p.add("     ");
             p.add(imgUnchecked);
@@ -2262,7 +2107,7 @@ public class ETermPdfGenerationServiceImpl extends NomineeAddendumPDF implements
             Table table2 = new Table(1);
             Table champBenefitOptions = new Table(new float[]{500F, 500F});
             p = new Paragraph("(Please select the appropriate option for ");
-            p.add(new Text("IndiaFirst Life Guaranteed Benefit Plan").setBold());
+            p.add(new Text(jsonUtility.getJsonKeyValue("content17", contentJson)).setBold());
             p.add("\n");
             p.add(new Text("Benefit Option").setBold());
             p.add("\n");
@@ -2292,8 +2137,8 @@ public class ETermPdfGenerationServiceImpl extends NomineeAddendumPDF implements
 
             Table fortunePlusDetails = new Table(new float[]{800F, 300F});
             p = new Paragraph("For ");
-            p.add(new Text("IndiaFirst Life Fortune Plus Plan").setBold());
-            p.add(" please choose appropriate option for Guaranteed Survival Benefit & Cash Bonus: ");
+            p.add(new Text(jsonUtility.getJsonKeyValue("content18", contentJson)).setBold());
+            p.add(jsonUtility.getJsonKeyValue("content20", contentJson));
             fortunePlusDetails.addCell(new Cell().add(p).setVerticalAlignment(VerticalAlignment.MIDDLE).setBorder(Border.NO_BORDER));
             p = new Paragraph();
             p.add(imgUnchecked);
@@ -2308,18 +2153,18 @@ public class ETermPdfGenerationServiceImpl extends NomineeAddendumPDF implements
             table.addCell(new Cell().add(fortunePlusDetails));
 
             Table benefitOptionDetails = new Table(new float[]{300F, 800F});
-            p = new Paragraph("(Please select the appropriate option for IndiaFirst Life Little Champ Plan,  ");
-            p.add(new Text("IndiaFirst Life Guaranteed Monthly Income Plan, IndiaFirst Life Smart Pay Plan, IndiaFirst Life Long Guaranteed Income Plan and IndiaFirst " + "Life Guaranteed Benefit Plan)").setBold());
+            p = new Paragraph(jsonUtility.getJsonKeyValue("content21", contentJson));
+            p.add(new Text(jsonUtility.getJsonKeyValue("content22", contentJson)).setBold());
             benefitOptionDetails.addCell(new Cell().add(p).setBorder(Border.NO_BORDER));
             p = new Paragraph("For  ");
-            p.add(new Text("IndiaFirst Life Long Guaranteed Income Plan").setBold());
+            p.add(new Text(jsonUtility.getJsonKeyValue("content23", contentJson)).setBold());
             p.add(" please choose appropriate Gap Year:");
             p.add("     0 Years    ");
             p.add(imgUnchecked);
             p.add("     3 Years    ");
             p.add(imgUnchecked);
             p.add("     5 Years    ");
-            p.add("\n(Please select the appropriate option for IndiaFirst Life Little Champ Plan)");
+            p.add(jsonUtility.getJsonKeyValue("content24", contentJson));
             benefitOptionDetails.addCell(new Cell(1, 2).add(p).setVerticalAlignment(VerticalAlignment.MIDDLE).setBorder(Border.NO_BORDER));
             benefitOptionDetails.addCell(new Cell().add("Risk Cover Option").setBold().setTextAlignment(TextAlignment.CENTER).setVerticalAlignment(VerticalAlignment.MIDDLE).setBorder(Border.NO_BORDER));
             p = new Paragraph();
@@ -2352,8 +2197,8 @@ public class ETermPdfGenerationServiceImpl extends NomineeAddendumPDF implements
             p.add("     8) 125%    ");
             benefitOptionDetails.addCell(new Cell().add(p).setVerticalAlignment(VerticalAlignment.MIDDLE).setBorder(Border.NO_BORDER));
             p = new Paragraph("For  ");
-            p.add(new Text("IndiaFirst Life Long Guaranteed Income Plan").setBold());
-            p.add(" please choose appropriate Income Benefit Frequency");
+            p.add(new Text(jsonUtility.getJsonKeyValue("content25", contentJson)).setBold());
+            p.add(jsonUtility.getJsonKeyValue("content26", contentJson));
             benefitOptionDetails.addCell(new Cell().add(p).setVerticalAlignment(VerticalAlignment.MIDDLE).setBorder(Border.NO_BORDER));
             p = new Paragraph();
             p.add(imgUnchecked);
@@ -2365,50 +2210,10 @@ public class ETermPdfGenerationServiceImpl extends NomineeAddendumPDF implements
             p.add(imgUnchecked);
             p.add("     Monthly    ");
             benefitOptionDetails.addCell(new Cell().add(p).setVerticalAlignment(VerticalAlignment.MIDDLE).setBorder(Border.NO_BORDER));
-
-//            p = new Paragraph("(Please select the appropriate option for\n ");
-//            p.add(new Text("IndiaFirst Life Guaranteed Benefit Plan").setBold());
-//            p.add(")\n");
-//            p.add(new Text("Benefit Option").setBold());
-//            p.add("\n");
-//            benefitOptionDetails.addCell(new Cell().add(p).setVerticalAlignment(VerticalAlignment.MIDDLE).setBorder(Border.NO_BORDER));
-//            Table optionDetails = new Table(new float[]{100F, 700F});
-//            p = new Paragraph();
-//            p.add(imgUnchecked);
-//            optionDetails.addCell(new Cell().add(p).setTextAlignment(TextAlignment.CENTER).setBorder(Border.NO_BORDER));
-//            p = new Paragraph();
-//            p.add("     Lumpsum Benefit    ");
-//            optionDetails.addCell(new Cell().add(p).setBorder(Border.NO_BORDER));
-//            p = new Paragraph();
-//            p.add(imgUnchecked);
-//            optionDetails.addCell(new Cell().add(p).setTextAlignment(TextAlignment.CENTER).setBorder(Border.NO_BORDER));
-//            p = new Paragraph();
-//            p.add("     Income Benefit    ");
-//            optionDetails.addCell(new Cell().add(p).setBorder(Border.NO_BORDER));
-
-//            String monthlyIncome = "1000000";
-//            String gapYears = "5";
-//            String incomePeriod = "10";
-//
-//            p = new Paragraph("If Income Benefit Option is chosen, please mention below details:-\n");
-//            p.add("Monthly Income(Rs)  ");
-//            p.add(new Text(monthlyIncome).setUnderline());
-//            p.add("     GAP Period(Years)  ");
-//            p.add(new Text(gapYears).setUnderline());
-//            p.add("     Income Period(Years) ");
-//            p.add(new Text(incomePeriod).setUnderline());
-//            benefitOptionDetails.addCell(new Cell().add(p).setVerticalAlignment(VerticalAlignment.MIDDLE).setBorder(Border.NO_BORDER));
-
-            String sumAssuredReduced = "   ";
-            // p=new Paragraph("
-            // ropriate Options for ")
-            // p = new Paragraph(new Text("IndiaFirst Life Guaranteed Protection Plus Plan
-            // ").setBold());
-            // p.add("(Select any one of the below Options)");
             benefitOptionDetails = new Table(new float[]{300F, 800F});
-            p = new Paragraph("Please Select Appropriate Options for ");
-            p.add(new Text("IndiaFirst Life Super Protection Plan").setBold());
-            p.add(" (Select any one of the below Options)");
+            p = new Paragraph(jsonUtility.getJsonKeyValue("content27", contentJson));
+            p.add(new Text(jsonUtility.getJsonKeyValue("content28", contentJson)));
+            p.add(jsonUtility.getJsonKeyValue("content29", contentJson));
             benefitOptionDetails.addCell(new Cell(1, 2).add(p).setBorder(Border.NO_BORDER));
             Table optionDetails = new Table(new float[]{100F, 700F});
 
@@ -2512,42 +2317,9 @@ public class ETermPdfGenerationServiceImpl extends NomineeAddendumPDF implements
             optionDetails.addCell(new Cell().add(p).setBorder(Border.NO_BORDER));
             benefitOptionDetails.addCell(new Cell(1, 2).add(optionDetails).setBorder(Border.NO_BORDER));
             table.addCell(new Cell().add(benefitOptionDetails));
-
-//            fortunePlusDetails = new Table(new float[]{800F, 300F});
-//            p = new Paragraph("For ");
-//            p.add(new Text("IndiaFirst Life Fortune Plus Plan").setBold());
-//            p.add(" please choose appropriate option for Guaranteed Survival Benefit & Cash Bonus: ");
-//            fortunePlusDetails.addCell(new Cell().add(p).setVerticalAlignment(VerticalAlignment.MIDDLE).setBorder(Border.NO_BORDER));
-//            p = new Paragraph();
-//            p.add(imgUnchecked);
-//            p.add("     Payout       ");
-//            p.add(imgUnchecked);
-//            p.add("     Accrual       ");
-//            fortunePlusDetails.addCell(new Cell().add(p).setBorder(Border.NO_BORDER));
-//            p = new Paragraph("If Payout Option is chosen, then Payout Frequency ");
-//            p.add(new Text("_________________"));
-//            fortunePlusDetails.addCell(new Cell(1, 2).add(p).setVerticalAlignment(VerticalAlignment.MIDDLE).setBorder(Border.NO_BORDER));
-//
-//            table.addCell(new Cell().add(fortunePlusDetails));
-            /*
-             * deathBenefitOptions = new Table(new float[]{700F, 300F});
-             * deathBenefitOptions.addCell(new Cell().
-             * add("Death Benefit Option for IndiaFirst Life Wealth Maximizer Plan, IndiaFirst Money Balance Plan and "
-             * + "IndiaFirst Smart Save Plan").setBold().setBorder(Border.NO_BORDER).
-             * setVerticalAlignment(VerticalAlignment.MIDDLE));
-             * p = new Paragraph();
-             * p.add(imgUnchecked);
-             * p.add("     Income (5 Years)       ");
-             * p.add(imgUnchecked);
-             * p.add("     Lumpsum       ");
-             * deathBenefitOptions.addCell(new
-             * Cell().add(p).setVerticalAlignment(VerticalAlignment.MIDDLE).setBorder(Border
-             * .NO_BORDER));
-             */
-
             Table deathBenefitOptions = new Table(new float[]{740F, 300F});
             p=new Paragraph("Choose options for ");
-            p.add(new Text("IndiaFirst Life Wealth Maximizer Plan, IndiaFirst Life Money Balance Plan, IndiaFirst Life Term with ULIP Plus and IndiaFirst Life Term with Unit Linked Insurance Plan").setBold());
+            p.add(new Text(jsonUtility.getJsonKeyValue("content30", contentJson)).setBold());
             deathBenefitOptions.addCell(new Cell(1,2).add(p).setBorder(Border.NO_BORDER).setVerticalAlignment(VerticalAlignment.MIDDLE));
 
             Table deathWithdrawal = new Table(new float[]{570F, 480F, 560F});
@@ -2567,41 +2339,15 @@ public class ETermPdfGenerationServiceImpl extends NomineeAddendumPDF implements
             p.add("     No       ");
             deathWithdrawal.addCell(new Cell(1,2).add(p).setVerticalAlignment(VerticalAlignment.MIDDLE).setTextAlignment(TextAlignment.LEFT).setBorder(Border.NO_BORDER));
             p = new Paragraph("(If yes, % of withdrawal ______ (between 0 to 25%), from year ______ to year ______");
-//            p.add(new Text(" ").setUnderline());
-//            p.add(" (Between 0% - 25%)");
             deathWithdrawal.addCell(new Cell().add(p).setVerticalAlignment(VerticalAlignment.MIDDLE).setTextAlignment(TextAlignment.LEFT).setBorder(Border.NO_BORDER));
-            p = new Paragraph("Systematic Partial Withdrawal option is applicable only for IndiaFirst Life Wealth Maximizer Plan after completion of first 5 policy years.");
-//            deathWithdrawal.addCell(new Cell(1, 3).add(p).setVerticalAlignment(VerticalAlignment.MIDDLE).setBorder(Border.NO_BORDER));
-//            deathWithdrawal.addCell(new Cell().add(new Paragraph("2) Frequency")).setTextAlignment(TextAlignment.CENTER).setVerticalAlignment(VerticalAlignment.MIDDLE).setBorder(Border.NO_BORDER));
-//            p = new Paragraph();
-
-//            if (frequency.equalsIgnoreCase("Yearly")) {
-//                p.add(imgUnchecked);
-//            } else {
-//                p.add(imgUnchecked);
-//            }
+            p = new Paragraph(jsonUtility.getJsonKeyValue("content31", contentJson));
             p.add("                        in frequency    ");
             p.add(imgUnchecked);
             p.add("     Yearly       ");
-//            if (frequency.equalsIgnoreCase("half yearly") || frequency.equalsIgnoreCase("half-yearly")) {
-//                p.add(imgUnchecked);
-//            } else {
-//                p.add(imgUnchecked);
-//            }
             p.add(imgUnchecked);
             p.add("     Half Yearly       ");
-//            if (frequency.equalsIgnoreCase("Quarterly")) {
-//                p.add(imgUnchecked);
-//            } else {
-//                p.add(imgUnchecked);
-//            }
             p.add(imgUnchecked);
             p.add("     Quarterly       ");
-//            if (frequency.equalsIgnoreCase("Monthly")) {
-//                p.add(imgUnchecked);
-//            } else {
-//                p.add(imgUnchecked);
-//            }
             p.add(imgUnchecked);
             p.add("     Monthly       ");
 
@@ -2668,10 +2414,8 @@ public class ETermPdfGenerationServiceImpl extends NomineeAddendumPDF implements
             p.add(imgUnchecked);
             p.add("     No       ");
             deathWithdrawal.addCell(new Cell().add(p).setVerticalAlignment(VerticalAlignment.MIDDLE).setBorder(Border.NO_BORDER));
-//            p = new Paragraph("ATBIS is applicable for IndiaFirst Life Money Balance Plan & IndiaFirst Life Wealth Maximizer Plan");
-//            deathWithdrawal.addCell(new Cell().add(p).setVerticalAlignment(VerticalAlignment.MIDDLE).setBorder(Border.NO_BORDER));
             deathBenefitOptions.addCell(new Cell(1, 2).add(deathWithdrawal).setBorder(Border.NO_BORDER));
-            deathBenefitOptions.addCell(new Cell().add("ATBIS is applicable for IndiaFirst Life Money Balance Plan & IndiaFirst Life Wealth Maximizer Plan").setVerticalAlignment(VerticalAlignment.MIDDLE).setBorder(Border.NO_BORDER));
+            deathBenefitOptions.addCell(new Cell().add(jsonUtility.getJsonKeyValue("content32", contentJson))).setVerticalAlignment(VerticalAlignment.MIDDLE).setBorder(Border.NO_BORDER);
             table.addCell(new Cell().add(deathBenefitOptions));
 
             Table fundsDetails = new Table(new float[]{350F, 80F, 300F, 80F, 300F, 80F});
@@ -2708,31 +2452,27 @@ public class ETermPdfGenerationServiceImpl extends NomineeAddendumPDF implements
             fundsDetails.addCell(new Cell().add("   "));
             fundsDetails.addCell(new Cell().add("   "));
 
-            p=new Paragraph("For Fund Transfer Strategy, please select one Equity Oriented Fund and one Debt Oriented Fund.");
+            p=new Paragraph(jsonUtility.getJsonKeyValue("content33", contentJson));
             p.add(new Text("\nNote: ").setBold());
-            p.add(" The first three months premium is to be paid as first installment for the monthly mode option (not applicable for pure protection plans). Any cash/cheque/DD payment made towards first or renewal premium is deemed to be received by ”IndiaFirst Life Insurance Company Ltd.” only when the same has been received by any of its offices or its authorised banking partners or collection point and after an official printed receipt is issued by the Company. Cheques must be drawn only in favour of IndiaFirst Life Insurance Company Ltd. (Application no. for first premium/ policy no. for renewal premium should be written behind the cheque).");
+            p.add(jsonUtility.getJsonKeyValue("content34", contentJson));
             p.add(new Text("\nNote: ").setBold());
-            p.add("The collections points/ centers for accepting payment in cash/ cheque/ DD will be as specified by the Company from time to time. ");
+            p.add(jsonUtility.getJsonKeyValue("content35", contentJson));
             fundsDetails.addCell(new Cell(1, 6).add(p));
-            //fundsDetails.addCell(new Cell(1, 6).add("For Fund Transfer Strategy, please select one Equity Oriented Fund and one Debt Oriented Fund."));
-            //fundsDetails.addCell(new Cell(1, 6).add("Note: The first three months premium is to be paid as first installment for the monthly mode option (not applicable for pure protection plans). Any cash/cheque/DD payment made towards first or renewal premium is deemed to be " + "received by ”IndiaFirst Life Insurance Company Ltd.” only when the same has been received by any of its offices or its authorised banking partners or collection point and after an official printed receipt is issued by the Company. " + "Cheques must be drawn only in favour of IndiaFirst Life Insurance Company Ltd. (Application no. for first premium/ policy no. for renewal premium should be written behind the cheque). Note: The collections points/ centers for " + "accepting payment in cash/ cheque/ DD will be as specified by the Company from time to time."));
             table.addCell(new Cell().add(fundsDetails).setBorder(Border.NO_BORDER));
-//            p=new Paragraph("Note: The first three months premium is to be paid as first installment for the monthly mode option (not applicable for pure protection plans). Any cash/cheque/DD payment made towards first or renewal premium is deemed to be received by ”IndiaFirst Life Insurance Company Ltd.” only when the same has been received by any of its offices or its authorised banking partners or collection point and after an official printed receipt is issued by the Company.Cheques must be drawn only in favour of IndiaFirst Life Insurance Company Ltd. (Application no. for first premium/ policy no. for renewal premium should be written behind the cheque). Note: The collections points/ centers for accepting payment in cash/ cheque/ DD will be as specified by the Company from time to time.");
-//            p.add("\n\n");
             p=new Paragraph(new Text("Third Party payment: ").setBold());
-            p.add(" I hereby declare that the payment mode as availed by me under my policy belongs to me and I take sole responsibility for the same in respect of any incorrectness of any statement in this regard.");
+            p.add(jsonUtility.getJsonKeyValue("content36", contentJson));
             table.addCell(new Cell().add(p).setBorder(Border.NO_BORDER));
 
             headingCell = new Cell();
             headingCell.setBackgroundColor(Color.GRAY, 100);
-            p = new Paragraph("5. Details of Secondary Life Assured (If Joint Life option is chosen).  Only applicable for IndiaFirst Life Super Protection Plan");
+            p = new Paragraph(jsonUtility.getJsonKeyValue("content37", contentJson));
             p.setBold();
             p.setFontKerning(FontKerning.YES);
             p.setFontColor(Color.WHITE);
             headingCell.add(p);
             table.addCell(new Cell().add(headingCell).setBorder(Border.NO_BORDER));
 
-            Table secondaryLifeAssuredDetails = this.getSecondaryLifeAssuredDetails(applicationNo, imgChecked, imgUnchecked, planDetailObj, insuredPersonBasicDetailObj, secondaryPersonalDetailObj, secondaryDocumentDetailObj, secondaryEmploymentDetailObj, secondaryFatcaDetailObj, otherSetOccupation, ageProofMap, buyFor, isOmniDoc,primaryPersonalDetailObj,innerProposer,userData);
+            Table secondaryLifeAssuredDetails = this.getSecondaryLifeAssuredDetails(applicationNo, imgChecked, imgUnchecked, planDetailObj, insuredPersonBasicDetailObj, secondaryPersonalDetailObj, secondaryDocumentDetailObj, secondaryEmploymentDetailObj, secondaryFatcaDetailObj, otherSetOccupation, ageProofMap, buyFor, isOmniDoc,primaryPersonalDetailObj,innerProposer,userData, contentJson);
             table.addCell(new Cell().add(secondaryLifeAssuredDetails).setBorder(Border.NO_BORDER));
 
             headingCell = new Cell();
@@ -2743,114 +2483,7 @@ public class ETermPdfGenerationServiceImpl extends NomineeAddendumPDF implements
             p.setFontColor(Color.WHITE);
             headingCell.add(p);
             table.addCell(new Cell().add(headingCell).setBorder(Border.NO_BORDER));
-
-//            Table paymentDetails = new Table(2);
-//            proposerMergedcell = new Cell(1, 2);
-//            p=new Paragraph(new Text("For Proposer & Life Assured").setBold());
-//            p.add("\nMode selected will be used by the Company to pay the Life Assured/ Nominee according to the terms of the plan. If none of the below electronic payout option is chosen, the Company reserves the right to use any alternative payout option.");
-//            proposerMergedcell.add(p);
-//            proposerMergedcell.setBorder(Border.NO_BORDER);
-//            paymentDetails.addCell(proposerMergedcell);
-//
-//            String bankName = jsonUtility.getJsonKeyValue("Bank_Name", primaryBankObj);
-//            String branchName = jsonUtility.getJsonKeyValue("Branch_Name", primaryBankObj);
-//            String accountNo = jsonUtility.getJsonKeyValue("accountNumber", primaryBankObj);
-//            String micr = jsonUtility.getJsonKeyValue("MICR_Code", primaryBankObj);
-//            String ifscode = jsonUtility.getJsonKeyValue("ifscCode", primaryBankObj);
-//            String customerName = jsonUtility.getJsonKeyValue("accountHolderName", primaryBankObj);
-//            String accountType = jsonUtility.getJsonKeyValue("accountType", primaryBankObj);
-//            String ecsStatus = jsonUtility.getJsonKeyValue("status", eMandateObj);
-//
-//            paymentDetails.addCell(new Cell().add("ECS: ").setBorder(Border.NO_BORDER));
-//            if (ecsStatus.equalsIgnoreCase("success")) {
-//                paymentDetails.addCell(new Cell().add(imgUnchecked).setBorder(Border.NO_BORDER));
-//            } else {
-//                paymentDetails.addCell(new Cell().add(imgChecked).setBorder(Border.NO_BORDER));
-//            }
-//            paymentDetails.addCell(new Cell().add("Direct Credit (Bank of Baroda and Union Bank of India): ").setBorder(Border.NO_BORDER));
-//            paymentDetails.addCell(new Cell().add(imgUnchecked).setBorder(Border.NO_BORDER));
-//            paymentDetails.addCell(new Cell().add("NEFT: ").setBorder(Border.NO_BORDER));
-//            paymentDetails.addCell(new Cell().add(imgUnchecked).setBorder(Border.NO_BORDER));
-//            paymentDetails.addCell(new Cell().add("Bank Name: ").setBorder(Border.NO_BORDER));
-//            pointColumnWidths = new float[bankName.length()];
-//            for (int i = 0; i < bankName.length(); i++) {
-//                pointColumnWidths[i] = 20F;
-//            }
-//            tableCodes = codeTable(bankName, pointColumnWidths);
-//            paymentDetails.addCell(new Cell().add(tableCodes).setBorder(Border.NO_BORDER));
-//            paymentDetails.addCell(new Cell().add("Account Type: ").setBorder(Border.NO_BORDER));
-//            p = new Paragraph();
-//            if (accountType.equalsIgnoreCase("current")) {
-//                p.add(imgChecked);
-//            } else {
-//                p.add(imgUnchecked);
-//            }
-//            p.add("     Current     ");
-//            if (accountType.equalsIgnoreCase("savings")) {
-//                p.add(imgChecked);
-//            } else {
-//                p.add(imgUnchecked);
-//            }
-//            p.add("     Savings     ");
-//            paymentDetails.addCell(new Cell().add(p).setBorder(Border.NO_BORDER));
-//            paymentDetails.addCell(new Cell().add("Branch Name:  ").setBorder(Border.NO_BORDER));
-//            paymentDetails.addCell(new Cell().add(new Paragraph(branchName).setUnderline()).setBorder(Border.NO_BORDER));
-//            paymentDetails.addCell(new Cell().add("Bank Account No. : ").setBorder(Border.NO_BORDER));
-//            pointColumnWidths = new float[accountNo.length()];
-//            for (int i = 0; i < accountNo.length(); i++) {
-//                pointColumnWidths[i] = 20F;
-//            }
-//            if (accountNo.length() > 0) {
-//                tableCodes = codeTable(accountNo, pointColumnWidths);
-//                paymentDetails.addCell(new Cell().add(tableCodes).setBorder(Border.NO_BORDER));
-//            } else {
-//                paymentDetails.addCell(new Cell().add(new Paragraph("")).setBorder(Border.NO_BORDER));
-//            }
-//            p = new Paragraph("MICR: ");
-//            p.add("\n(Mandatory for ECS mode)");
-//            paymentDetails.addCell(new Cell().add(p).setBorder(Border.NO_BORDER));
-//            pointColumnWidths = new float[micr.length()];
-//            for (int i = 0; i < micr.length(); i++) {
-//                pointColumnWidths[i] = 20F;
-//            }
-//            if (micr.length() > 0) {
-//                tableCodes = codeTable(micr, pointColumnWidths);
-//                paymentDetails.addCell(new Cell().add(tableCodes).setBorder(Border.NO_BORDER));
-//            } else {
-//                paymentDetails.addCell(new Cell().add(new Paragraph("")).setBorder(Border.NO_BORDER));
-//            }
-//            p = new Paragraph("IFSC code: ");
-//            p.add("\n(Mandatory for NEFT mode)");
-//            paymentDetails.addCell(new Cell().add(p).setBorder(Border.NO_BORDER));
-//            pointColumnWidths = new float[ifscode.length()];
-//            for (int i = 0; i < ifscode.length(); i++) {
-//                pointColumnWidths[i] = 20F;
-//            }
-//            if (ifscode.length() > 0) {
-//                tableCodes = codeTable(ifscode, pointColumnWidths);
-//                paymentDetails.addCell(new Cell().add(tableCodes).setBorder(Border.NO_BORDER));
-//            } else {
-//                paymentDetails.addCell(new Cell().add(new Paragraph("")).setBorder(Border.NO_BORDER));
-//            }
-//            paymentDetails.addCell(new Cell().add("Customer’s Name as per the Bank Account.: ").setBorder(Border.NO_BORDER));
-//            pointColumnWidths = new float[customerName.length()];
-//            for (int i = 0; i < customerName.length(); i++) {
-//                pointColumnWidths[i] = 20F;
-//            }
-//            if (customerName.length() > 0) {
-//                tableCodes = codeTable(customerName, pointColumnWidths);
-//                paymentDetails.addCell(new Cell().add(tableCodes).setBorder(Border.NO_BORDER));
-//            } else {
-//                paymentDetails.addCell(new Cell().add(new Paragraph("")).setBorder(Border.NO_BORDER));
-//            }
-//            table.addCell(new Cell().add(paymentDetails).setBorder(Border.NO_BORDER));
-//            p = new Paragraph();
-//            p.add(new Text("Please provide a cancelled copy of your cheque if any of the above option is selected.").setBold());
-//            table.addCell(new Cell().add(p).setBorder(Border.NO_BORDER));
-
-
-            ///////////////////////////
-            Table bankDetails = this.getBankDetails(imgUnchecked, imgChecked,primaryBankObj,eMandateObj,nomineeList);
+            Table bankDetails = this.getBankDetails(imgUnchecked, imgChecked,primaryBankObj,eMandateObj,nomineeList, contentJson);
             table.addCell(new Cell().add(bankDetails).setBorder(Border.NO_BORDER));
             //////////////////////////
 
@@ -2944,13 +2577,13 @@ public class ETermPdfGenerationServiceImpl extends NomineeAddendumPDF implements
 
             headingCell = new Cell();
             headingCell.setBackgroundColor(Color.GRAY, 100);
-            p = new Paragraph(new Text("9a. Details of life insurance policies held/ proposals applied with life insurance companies ").setBold());
-            p.add("(including existing policies with IndiaFirst Life Insurance Co. Ltd.)");
+            p = new Paragraph(new Text(jsonUtility.getJsonKeyValue("content38", contentJson)).setBold());
+            p.add(jsonUtility.getJsonKeyValue("content39", contentJson));
             p.setFontKerning(FontKerning.YES);
             p.setFontColor(Color.WHITE);
             headingCell.add(p);
             table.addCell(new Cell().add(headingCell).setBorder(Border.NO_BORDER));
-            p = new Paragraph("Have you ever applied for life insurance policies with IndiaFirst Life Insurance Co. Ltd and with other insurers? If yes, please give full details below, with present status and terms of acceptance " + "for all proposals/ policies applied:    ");
+            p = new Paragraph(jsonUtility.getJsonKeyValue("content40", contentJson));
             String appliedInsuranceStatus = jsonUtility.getJsonKeyValue("status", jsonUtility.getJsonObjectByKey("appliedInsurance", primaryOtherDetailObj));
             if (appliedInsuranceStatus.equalsIgnoreCase("y")) {
                 p.add(imgChecked);
@@ -3015,18 +2648,18 @@ public class ETermPdfGenerationServiceImpl extends NomineeAddendumPDF implements
             }
             table.addCell(new Cell().add(insurancePolicies).setBorder(Border.NO_BORDER));
             p = new Paragraph();
-            p.add("Additional sheets with relevant details signed by the life to be assured may be added if space is insufficient.");
+            p.add(jsonUtility.getJsonKeyValue("content41", contentJson));
             table.addCell(new Cell().add(p).setBorder(Border.NO_BORDER));
 
             headingCell = new Cell();
             headingCell.setBackgroundColor(Color.GRAY, 100);
-            p = new Paragraph(new Text("9b . Details of life insurance policies held/ proposals applied with life insurance companies ").setBold());
-            p.add("(including existing policies with IndiaFirst Life Insurance Co. Ltd.)(Details of " + "Secondary Life Assured (If Joint Life option or Better Half Benefit is chosen). Only applicable for IndiaFirst Life Guaranteed Protection Plus Plan)");
+            p = new Paragraph(new Text(jsonUtility.getJsonKeyValue("content41", contentJson)).setBold());
+            p.add(jsonUtility.getJsonKeyValue("content42", contentJson));
             p.setFontKerning(FontKerning.YES);
             p.setFontColor(Color.WHITE);
             headingCell.add(p);
             table.addCell(new Cell().add(headingCell).setBorder(Border.NO_BORDER));
-            p = new Paragraph("Have you ever applied for life insurance policies with IndiaFirst Life Insurance Co. Ltd and with other insurers? If yes, please give full details below, with present status and terms of acceptance " + "for all proposals/ policies applied:    ");
+            p = new Paragraph(jsonUtility.getJsonKeyValue("content43", contentJson));
             appliedInsuranceStatus = jsonUtility.getJsonKeyValue("status", jsonUtility.getJsonObjectByKey("appliedInsurance", secondaryOtherDetailObj));
             if (appliedInsuranceStatus.equalsIgnoreCase("y")) {
                 p.add(imgChecked);
@@ -3559,9 +3192,9 @@ public class ETermPdfGenerationServiceImpl extends NomineeAddendumPDF implements
 
             headingCell = new Cell();
             headingCell.setBackgroundColor(Color.GRAY, 100);
-            p = new Paragraph(new Text("10b. Lifestyle questions and personal medical history of the Secondary Life to be Assured \n").setBold());
+            p = new Paragraph(new Text(jsonUtility.getJsonKeyValue("content46", contentJson)).setBold());
 
-            p.add("(If 'Yes', please encircle the activity/ ailment/ disease) If Joint Life option is chosen. Only applicable for IndiaFirst Life Guaranteed Protection Plus Plan");
+            p.add(jsonUtility.getJsonKeyValue("content47", contentJson));
             p.setFontKerning(FontKerning.YES);
             p.setFontColor(Color.WHITE);
             headingCell.add(p);
@@ -4479,33 +4112,24 @@ public class ETermPdfGenerationServiceImpl extends NomineeAddendumPDF implements
             headingCell.add(p);
             table.addCell(new Cell().add(headingCell).setBorder(Border.NO_BORDER));
 
-            p = new Paragraph("I / we have understood the questions in the proposal form and I / we have answered them truthfully, completely and correctly. I / we further declare that I / we have not withheld any material fact or information which may affect the " + "decision of IndiaFirst Life Insurance Company Limited (Hereafter called the “Company”) in underwriting the risk, and the information provided by me / us in the proposal form, the supplementary documents and information provided " + "to the medical examiner in case of being medically examined will form the basis of the contract between me/us and the Company and in case of fraud, misrepresentation and suppression of material facts the policy contract shall be " + "treated in accordance with the Sec 45 of Insurance Act,1938 as amended from time to time. I / we hereby authorize and direct any doctor, hospital, or employer (past and present) to disclose to the Company any information relating " + "to my present state of health, past health history and nature of work performed by me / us. I / we undertake to undergo all medicals as may be required by the Company to assess the risk and grant the insurance. I / we further agree " + "that if after the date of submission of the proposal but before the issuance of policy (i) there is an adverse change in my / us occupation, financial condition, health condition which will affect the decision of the Company in underwriting " + "risk or (ii) if a proposal for assurance or an application for revival of the policy on my / our life or the life to be assured made to any insurer is withdrawn or dropped, deferred, declined or accepted at an increased premium or subject to " + "a lien or on terms other than as proposed, I / we shall forthwith intimate the same to the Company in writing. Failure to do this on my / our part may render this assurance invalid and the policy will be dealt in accordance with section " + "45 of the Insurance Act, 1938 as amended from time to time. I / we understand that the cover applied for under this application will commence after approval of my application and receipt of the required premium by the Company. I  " + "we, hereby declare that the premium have not been generated from proceeds of any criminal activities / offences listed in the Prevention of Money Laundering Act 2002 or under any other applicable law. I understand that in case of " + "withdrawal of this application by me post undergoing medicals or part thereof, the Company shall return the premium deposit after deducting the expenses incurred on the medical test/examination, if any.");
+            p = new Paragraph(jsonUtility.getJsonKeyValue("content48", contentJson));
             table.addCell(new Cell().add(p).setBorder(Border.NO_BORDER));
-            p = new Paragraph(new Text("Digital Policy Document declaration: \n").setBold());
-            p.add("By submitting my details, I authorize hereby IndiaFirst Life and its authorized representatives to contact me and send information/communication through SMS/Email/ Phone/Letter/WhatsApp and/or any other " +
-                    "electronic mode of communication to my registered email id/ phone number. I hereby consent IndiaFirst Life to store, share, process, use my personal data/information with government agencies/statutory " +
-                    "authorities/entities as authorized by the IRDAI, third party service providers and partners & affiliates for the purposes of issuance of policy, data analytics, and other related due diligence activities as may be " +
-                    "requires by IndiaFirst Life.\n");
-            p.add("The disclosure of information made on this platform is with my wilful consent. I further acknowledge and agree that IndiaFirst Life shall not be held liable for any breach, loss, or unauthorized disclosure of the data " +
-                    "provided herein.\n");
-            p.add(new Text("I/We hereby give my consent to the Company to carry out due diligence in respect of information, as provided by me in the proposal form, including AML-eKYC verification, and also to store/share the data/information with government agencies/statutory authorities/entities as authorized by the regulator - IRDAI for necessary verification purposes and/or policy servicing purpose.\n").setBold());
-            p.add(new Text("Having gone through the “Needs Analysis” process, I hereby confirm that the recommended product and its features have been explained to my satisfaction, and it matches my current insurance needs.\n").setBold());
-            p.add(new Text("“I/We hereby give consent to the Company for obtaining/downloading CKYC record from Central KYC Records Registry. I/We hereby give consent to the Company for obtaining/downloading KYC details/ from " +
-                    "government agencies/ entities as authorized by the regulator/ statutory authorities like Passport Seva, Parivahan Sewa, Election Commission of India”.").setBold());
+            p = new Paragraph(new Text(jsonUtility.getJsonKeyValue("declarationHeading1", contentJson)).setBold());
+            p.add(jsonUtility.getJsonKeyValue("declarationContent1", contentJson));
+            p.add(jsonUtility.getJsonKeyValue("declarationContent2", contentJson));
+            p.add(new Text(jsonUtility.getJsonKeyValue("declarationContent3", contentJson)).setBold());
+            p.add(new Text(jsonUtility.getJsonKeyValue("declarationContent4", contentJson)).setBold());
+            p.add(new Text(jsonUtility.getJsonKeyValue("declarationContent5", contentJson)).setBold());
             p.add("\n\n");
             if (jsonUtility.getJsonKeyValue("basbastatus",paymentDetailObj).equalsIgnoreCase("success")) {
-                p.add(new Text("I hereby provide my express consent and authorise IndiaFirst Life Insurance Company Ltd to block an amount as quoted in this proposal form (including applicable taxes), for the purpose of premium payment towards insurance. I agree and understand that this mandate shall be valid for a period of 14 days from the date of premium block mandate or date of acceptance of this proposal, whichever is earlier and that the blocked amount will be utilised towards premium payment upon proposal acceptance. I further authorise IndiaFirst Life Insurance Company Ltd to share information with the relevant entities for the purpose of blocking/releasing the premium amount.\n").setBold());
+                p.add(new Text(jsonUtility.getJsonKeyValue("declarationContent7", contentJson))).setBold();
             }
-            p.add(new Text("The premium for the proposed insurance policy is payable only after the IndiaFirst Life Insurance Company Ltd has communicated its decision regarding the acceptance of this proposal. The policy shall commence only upon acceptance of the proposal by the IndiaFirst Life Insurance Company Ltd  and Risk Cover shall commence only after receipt of premium.").setBold());
+            p.add(new Text(jsonUtility.getJsonKeyValue("declarationContent8", contentJson)).setBold());
             table.addCell(new Cell().add(p).setBorder(Border.NO_BORDER));
             p = new Paragraph();
             p.add(new Text("NRI/PIO declaration: ").setBold());
-            p.add("By providing consent through OTP on the application form I/We hereby confirm that NRI/PIO details provided by me / us in the questionnaire are correct and to the best of my knowledge. By feeding in the said " + "number in the system, I hereby acknowledge the above declaration in its entirety and the same would create a legally binding agreement between the Company and me.");
+            p.add(jsonUtility.getJsonKeyValue("declarationContent9", contentJson));
             table.addCell(new Cell().add(p).setBorder(Border.NO_BORDER));
-//            p = new Paragraph();
-//            p.add(new Text("Digital Policy Document declaration: ").setBold());
-//            p.add(" I/We hereby give my consent to receive all communications and policy document via email from IndiaFirst Life Insurance Company Limited.");
-//            table.addCell(new Cell().add(p).setBorder(Border.NO_BORDER));
 
             p=new Paragraph();
             if (isOmniDoc) {
@@ -4513,14 +4137,14 @@ public class ETermPdfGenerationServiceImpl extends NomineeAddendumPDF implements
             }else {
                 p.add(imgUnchecked);
             }
-            p.add(new Text("  I hereby authorize IndiaFirst Life Insurance. Co. Ltd., to collect my KYC records from the Central KYC Records Registry (CERSAI) / Third Party for the purpose of KYC verification for my insurance application. Or I hereby authorize IndiaFirst Life Insurance. Co. Ltd., to collect my KYC details/CKYC number from the Bank who is working as a Corporate Agent with them for issuing my insurance policy."));
+            p.add(new Text(jsonUtility.getJsonKeyValue("declarationContent10", contentJson)));
             p.add("\n");
             if (isOmniDoc) {
                 p.add(imgChecked);
             }else {
                 p.add(imgUnchecked);
             }
-            p.add(new Text("  I hereby authorize IndiaFirst Life Insurance. Co. Ltd., to share my personal details including KYC details with third party for the purpose of policy printing, dispatch, and all policy servicing purposes wherever required."));
+            p.add(new Text(jsonUtility.getJsonKeyValue("declarationContent11", contentJson)));
             table.addCell(new Cell().add(p).setBorder(Border.NO_BORDER));
 
             p = new Paragraph();
@@ -4567,7 +4191,7 @@ public class ETermPdfGenerationServiceImpl extends NomineeAddendumPDF implements
 
             /////
             p = new Paragraph();
-            p.add("Secondary Life to be Assured signature (if Joint Life option or better Half benefit is chosen.\n" + "Only applicable for IndiaFirst Life Guaranteed Protection Plus Plan)");
+            p.add(jsonUtility.getJsonKeyValue("content49", contentJson));
             table.addCell(new Cell().add(p).setBorder(Border.NO_BORDER));
 
             laName = jsonUtility.getJsonKeyValue("fullName", insuredPersonBasicDetailObj);
@@ -4614,25 +4238,24 @@ public class ETermPdfGenerationServiceImpl extends NomineeAddendumPDF implements
                 p.add(new Text("________"));
             }
             p.add("\n\n");
-            p.add(new Text("Signature authentication (Single factor authentication): ").setBold());
-            p.add("An OTP authentication number has been sent on your registered mobile number. By feeding in the said number in the system, you hereby acknowledge the above declaration " + "in its entirety and the same would create a legally binding agreement between the Company and You");
+            p.add(new Text(jsonUtility.getJsonKeyValue("content50", contentJson)).setBold());
+            p.add(jsonUtility.getJsonKeyValue("content51", contentJson));
             table.addCell(new Cell().add(p).setBorder(Border.NO_BORDER));
 
             p = new Paragraph();
-            p.add(new Text("Section 41 of Insurance Act 1938, as amended from time to time: ").setBold());
-            p.add("No person shall allow or offer to allow, either directly or indirectly, as an inducement to any person to take or renew or continue an insurance in respect of " + "any kind of risk relating to lives or property in India, any rebate of the whole or part of the commission payable or any rebate of the premium shown on the policy, nor shall any person taking out or renewing or continuing a policy " + "accept any rebate, except such rebate as may be allowed in accordance with the published prospectus or tables of the insurer. Any person making default in complying with the provisions of this section shall be liable for a penalty " + "which may extend to ten lakh rupees.");
+            p.add(new Text(jsonUtility.getJsonKeyValue("content52", contentJson)).setBold());
+            p.add(jsonUtility.getJsonKeyValue("content53", contentJson));
             table.addCell(new Cell().add(p).setBorder(Border.NO_BORDER));
 
             p = new Paragraph();
-            p.add(new Text("Extract of Section 45 of the Insurance Act, 1938, as amended from time to time: ").setBold());
-            p.add("No policy of life insurance shall be called into question on any ground whatsoever after the expiry of three years from the date of policy. A policy of life insurance may be called into question at anytime within three years from the " + "date of policy, on the ground of fraud or on the ground that any statement of or suppression of a fact material to the expectancy of the life of the insured was incorrectly made in the proposal or other document on the basis of which " + "the policy was issued or revived or rider issued. The insurer shall have to communicate in writing to the insured or legal representatives or nominees or assignees of the insured, the grounds and materials on which such decision " + "is based. No insurer shall repudiate a life insurance policy on the ground of fraud if the insured can prove that the misstatement or suppression of material fact was true to the best of his knowledge and belief or that there was no " + "deliberate intention to suppress the fact or that such misstatement or suppression are within the knowledge of the insurer. In case of fraud, the onus of disproving lies upon the beneficiaries, in case the policyholder is not alive. In " + "case of repudiation of the policy on the ground of misstatement or suppression of a material fact and not on the grounds of fraud, the premiums collected on the policy till the date of repudiation shall be paid. Nothing in this section " + "shall prevent the insurer from calling for proof of age at any time if he is entitled to do so, and no policy shall be deemed to be called in question merely because the terms of the policy are adjusted on subsequent proof that the age " + "of the life insured was incorrectly stated in the proposal. For complete details of the section and the definition of 'date of policy', please refer Section 45 of the Insurance Act, 1938, as amended from time to time.");
-            p.add(new Text("""
-                    \nCustomers are advised not to pay Insurance premium (initial or renewal) through cash or bearer instrument to IndiaFirst Life insurance Advisors/Employees/Insurance Agents. IndiaFirst Life Insurance Advisors/ Employees/Insurance Agents are not authorised to receive the premium in cash or bearer instrument. Handing over cash or bearer instrument to any IndiaFirst Life Insurance Advisor / Employee/Insurance Agents is solely at your own risk and the company in no way be held responsible for any loss in this regard. Insurance Premium Cheques must be drawn only in favour of IndiaFirst Life Insurance Company Ltd. (Proposal no. for first premium/ policy no. for renewal premium should be written behind the cheque). Any Cheque payment made shall be deemed to be received by IndiaFirst Life Insurance only when the same has been received by any office of IndiaFirst Life Insurance or its authorized collection points and after an official receipt is issued by the Company""").setBold());
+            p.add(new Text(jsonUtility.getJsonKeyValue("content54", contentJson)).setBold());
+            p.add(jsonUtility.getJsonKeyValue("content55", contentJson));
+            p.add(new Text(jsonUtility.getJsonKeyValue("content56", contentJson)).setBold());
             table.addCell(new Cell().add(p).setBorder(Border.NO_BORDER));
 
             headingCell = new Cell();
             headingCell.setBackgroundColor(Color.GRAY, 100);
-            p = new Paragraph("16. Declaration For Signing In Vernacular Or For Uneducated Persons");
+            p = new Paragraph(jsonUtility.getJsonKeyValue("content57", contentJson));
             p.setBold();
             p.setFontKerning(FontKerning.YES);
             p.setFontColor(Color.WHITE);
@@ -4640,7 +4263,7 @@ public class ETermPdfGenerationServiceImpl extends NomineeAddendumPDF implements
             table.addCell(new Cell().add(headingCell).setBorder(Border.NO_BORDER));
 
             p = new Paragraph();
-            p.add("1. Vernacular Declaration by the person filling in the form (In case form is filled up / signed in a language different from that of the Proposal Form) \n   I do hereby state that I have read out and explained the contents of the proposal form from IndiaFirst Life Insurance Co. Ltd to the proposer/life assured and he/she have understood the same.");
+            p.add(jsonUtility.getJsonKeyValue("content58", contentJson));
             table.addCell(new Cell().add(p).setBorder(Border.NO_BORDER));
 
             String nameOfDeclarant = "___________";
@@ -4666,16 +4289,8 @@ public class ETermPdfGenerationServiceImpl extends NomineeAddendumPDF implements
 
 
             p=new Paragraph("Note: The Declarant identity should be easily established and he/she should not be connected to insurer in any capacity.\n");
-            // p.add("I certify that the product applied for by me and the contents of the proposal form have been clearly explained to me and I have fully understood them. I further certify that the replies in the proposal form have been recorded as " + "per the information provided by me.");
             table.addCell(new Cell().add(p).setBorder(Border.NO_BORDER));
-
-//            signatureDeclarants = new Table(new float[]{300F, 300F, 300F, 150F});
-//            signatureDeclarants.addCell(new Cell().add("Signature or thumb impression of the person whose life is proposed to be assured").setBorder(Border.NO_BORDER));
-//            signatureDeclarants.addCell(new Cell().add(new Paragraph("").setUnderline()).setBorder(Border.NO_BORDER));
-//            signatureDeclarants.addCell(new Cell().add("Signature or thumb impression of the secondary life to be assured (if Joint Life option or Better Half benefit is chosen.Only applicable for IndiaFirst Life Guaranteed Protection Plus Plan)").setBorder(Border.NO_BORDER));
-//            signatureDeclarants.addCell(new Cell().add(new Paragraph("").setUnderline()).setBorder(Border.NO_BORDER));
-//            table.addCell(new Cell().add(signatureDeclarants).setBorder(Border.NO_BORDER));
-            p = new Paragraph();
+          p = new Paragraph();
             p.add("\n");
             p.add("2. In case the Life Assured / Proposer is illiterate, his/her thumb impression should be attested by a person of standing whose identity can easily be established, but unconnected with the insurer and this declaration should be made by him. “I hereby declare that I have fully explained the above questions and contents of the proposal form to the proposer in ");
             p.add(new Text(language).setUnderline());
@@ -4767,13 +4382,12 @@ public class ETermPdfGenerationServiceImpl extends NomineeAddendumPDF implements
             }else {
                 p.add(imgUnchecked);
             }
-            p.add("   I certify that the contents of the proposal form have been clearly explained to me and I have fully understood them. I further certify that the replies in the proposal form have been recorded as per the information provided by me.");
+            p.add(jsonUtility.getJsonKeyValue("content59", contentJson));
             signatureDeclarants.addCell(new Cell(1,4).add(p).setBorder(Border.NO_BORDER));
             signatureDeclarants.addCell(new Cell(1,4).add("").setHeight(20F).setBorder(Border.NO_BORDER));
-            signatureDeclarants.addCell(new Cell().add("Signature or thumb impression of the person whose life is proposed to be assured").setBorder(Border.NO_BORDER));
+            signatureDeclarants.addCell(new Cell().add(jsonUtility.getJsonKeyValue("content60", contentJson)).setBorder(Border.NO_BORDER));
             signatureDeclarants.addCell(new Cell().add(new Paragraph("").setUnderline()).setBorder(Border.NO_BORDER));
-            signatureDeclarants.addCell(new Cell(2,4).add("Signature or thumb impression of the secondary life to be assured (if Joint Life option or Better Half benefit is chosen.Only applicable for IndiaFirst Life Guaranteed Protection Plus Plan)").setBorder(Border.NO_BORDER));
-            //signatureDeclarants.addCell(new Cell().add(new Paragraph("").setUnderline()).setBorder(Border.NO_BORDER));
+            signatureDeclarants.addCell(new Cell(2,4).add(jsonUtility.getJsonKeyValue("content61", contentJson)).setBorder(Border.NO_BORDER));
             table.addCell(new Cell().add(signatureDeclarants).setBorder(Border.NO_BORDER));
             //////NEW section ended/////////////////
 
@@ -4960,30 +4574,30 @@ public class ETermPdfGenerationServiceImpl extends NomineeAddendumPDF implements
             p = new Paragraph("Aforementioned details can be used by the Company to pay the proposer according to the terms of the plan. Payment options (cheque will be used if none of the below electronic " + "payout option is chosen). Further, the Company reserves the right to use any alternative payout option including demand draft / payable at par cheque in spite of option for Direct " + "credit .");
             table.addCell(new Cell().add(p).setBorder(Border.NO_BORDER));
             Table uinList = new Table(new float[]{450F, 450F, 400F});
-            uinList.addCell(new Cell().add("• UIN for IndiaFirst Life Money Balance Plan 143L017V07*").setBorder(Border.NO_BORDER));
-            uinList.addCell(new Cell().add("• UIN for IndiaFirst Term Rider 143B001V02").setBorder(Border.NO_BORDER));
-            uinList.addCell(new Cell().add("• UIN for IndiaFirst Life Plan 143N007V03#").setBorder(Border.NO_BORDER));
-            uinList.addCell(new Cell().add("• UIN for IndiaFirst Life Wealth Maximizer Plan 143L029V05*").setBorder(Border.NO_BORDER));
-            uinList.addCell(new Cell().add("• UIN for IndiaFirst Life Cash Back Plan 143N024V05#").setBorder(Border.NO_BORDER));
-            uinList.addCell(new Cell().add("• UIN for IndiaFirst Life Smart Pay Plan 143N051V04#").setBorder(Border.NO_BORDER));
-            uinList.addCell(new Cell().add("• UIN for IndiaFirst Life Waiver of Premium Rider 143B017V01").setBorder(Border.NO_BORDER));
-            uinList.addCell(new Cell().add("• UIN for IndiaFirst Life Long Guaranteed Income Plan 143N054V06#").setBorder(Border.NO_BORDER));
-            uinList.addCell(new Cell().add("• UIN for IndiaFirst Life Guaranteed Benefit Plan 143N056V07#").setBorder(Border.NO_BORDER));
-            uinList.addCell(new Cell().add("• UIN for IndiaFirst Life Fortune Plus Plan 143N065V03#").setBorder(Border.NO_BORDER));
-            uinList.addCell(new Cell().add("• UIN for IndiaFirst Life Mahajeevan Plus Plan 143N059V03#").setBorder(Border.NO_BORDER));
-            uinList.addCell(new Cell().add("• UIN for IndiaFirst Life Guarantee Of Life Dreams Plan 143N080V03#").setBorder(Border.NO_BORDER));
-            uinList.addCell(new Cell().add("• UIN for IndiaFirst Life Elite Term Plan 143N070V01").setBorder(Border.NO_BORDER));
-            uinList.addCell(new Cell().add("• UIN for IndiaFirst Life Term with Unit Linked Insurance Plan 143L072V02*").setBorder(Border.NO_BORDER));
-            uinList.addCell(new Cell().add("• UIN for IndiaFirst Life Term with ULIP Plus 143L073V02*").setBorder(Border.NO_BORDER));
-            uinList.addCell(new Cell().add("• UIN for IndiaFirst Life Guaranteed Single Premium Plan 143N068V04*").setBorder(Border.NO_BORDER));
-            uinList.addCell(new Cell().add("• UIN for IndiaFirst Life Little Champ Plan 143N035V02").setBorder(Border.NO_BORDER));
-            uinList.addCell(new Cell().add("• UIN for IndiaFirst Life Super Protection Plan (UIN: 143N075V01)#").setBorder(Border.NO_BORDER));
-            uinList.addCell(new Cell().add("• UIN for IndiaFirst Life Total and Permanent Disability Rider (ULIP) 143A022V01").setBorder(Border.NO_BORDER));
-            uinList.addCell(new Cell().add("• UIN for IndiaFirst Life Accidental Death Benefit Rider (ULIP) 143A020V01").setBorder(Border.NO_BORDER));
-            uinList.addCell(new Cell().add("• UIN for IndiaFirst Life Accidental Death Benefit Rider (Traditional) 143B019V01").setBorder(Border.NO_BORDER));
-            uinList.addCell(new Cell(1,3).add("• UIN for IndiaFirst Life Total and Permanent Disability Rider (Traditional) 143B021V01").setHeight(20F).setBorder(Border.NO_BORDER));
-            uinList.addCell(new Cell(1,3).add("*IndiaFirst Life Accidental Death Benefit Rider (143A020V01) and IndiaFirst Life Total and Permanent Disability Rider (143A022V01) are available with the * marked product.").setBorder(Border.NO_BORDER));
-            uinList.addCell(new Cell(1,3).add("#IndiaFirst Life Accidental Death Benefit Rider (143B019V01) and IndiaFirst Life Total and Permanent Disability Rider (143B021V01) are available with the # marked product").setBorder(Border.NO_BORDER));
+            uinList.addCell(new Cell().add(jsonUtility.getJsonKeyValue("content62", contentJson)).setBorder(Border.NO_BORDER));
+            uinList.addCell(new Cell().add(jsonUtility.getJsonKeyValue("content63", contentJson)).setBorder(Border.NO_BORDER));
+            uinList.addCell(new Cell().add(jsonUtility.getJsonKeyValue("content64", contentJson)).setBorder(Border.NO_BORDER));
+            uinList.addCell(new Cell().add(jsonUtility.getJsonKeyValue("content65", contentJson)).setBorder(Border.NO_BORDER));
+            uinList.addCell(new Cell().add(jsonUtility.getJsonKeyValue("content66", contentJson)).setBorder(Border.NO_BORDER));
+            uinList.addCell(new Cell().add(jsonUtility.getJsonKeyValue("content67", contentJson)).setBorder(Border.NO_BORDER));
+            uinList.addCell(new Cell().add(jsonUtility.getJsonKeyValue("content68", contentJson)).setBorder(Border.NO_BORDER));
+            uinList.addCell(new Cell().add(jsonUtility.getJsonKeyValue("content69", contentJson)).setBorder(Border.NO_BORDER));
+            uinList.addCell(new Cell().add(jsonUtility.getJsonKeyValue("content70", contentJson)).setBorder(Border.NO_BORDER));
+            uinList.addCell(new Cell().add(jsonUtility.getJsonKeyValue("content71", contentJson)).setBorder(Border.NO_BORDER));
+            uinList.addCell(new Cell().add(jsonUtility.getJsonKeyValue("content72", contentJson)).setBorder(Border.NO_BORDER));
+            uinList.addCell(new Cell().add(jsonUtility.getJsonKeyValue("content73", contentJson)).setBorder(Border.NO_BORDER));
+            uinList.addCell(new Cell().add(jsonUtility.getJsonKeyValue("content74", contentJson)).setBorder(Border.NO_BORDER));
+            uinList.addCell(new Cell().add(jsonUtility.getJsonKeyValue("content75", contentJson)).setBorder(Border.NO_BORDER));
+            uinList.addCell(new Cell().add(jsonUtility.getJsonKeyValue("content76", contentJson)).setBorder(Border.NO_BORDER));
+            uinList.addCell(new Cell().add(jsonUtility.getJsonKeyValue("content77", contentJson)).setBorder(Border.NO_BORDER));
+            uinList.addCell(new Cell().add(jsonUtility.getJsonKeyValue("content78", contentJson)).setBorder(Border.NO_BORDER));
+            uinList.addCell(new Cell().add(jsonUtility.getJsonKeyValue("content79", contentJson)).setBorder(Border.NO_BORDER));
+            uinList.addCell(new Cell().add(jsonUtility.getJsonKeyValue("content80", contentJson)).setBorder(Border.NO_BORDER));
+            uinList.addCell(new Cell().add(jsonUtility.getJsonKeyValue("content81", contentJson)).setBorder(Border.NO_BORDER));
+            uinList.addCell(new Cell().add(jsonUtility.getJsonKeyValue("content82", contentJson)).setBorder(Border.NO_BORDER));
+            uinList.addCell(new Cell(1,3).add(jsonUtility.getJsonKeyValue("content83", contentJson)).setHeight(20F).setBorder(Border.NO_BORDER));
+            uinList.addCell(new Cell(1,3).add(jsonUtility.getJsonKeyValue("content84", contentJson)).setBorder(Border.NO_BORDER));
+            uinList.addCell(new Cell(1,3).add(jsonUtility.getJsonKeyValue("content85", contentJson)).setBorder(Border.NO_BORDER));
             table.addCell(new Cell().add(uinList).setBorder(Border.NO_BORDER));
             document.add(table);
             p = new Paragraph();
@@ -5011,8 +4625,8 @@ public class ETermPdfGenerationServiceImpl extends NomineeAddendumPDF implements
 
             Table grandFooterTable = new Table(new float[]{600F, 500F});
             grandFooterTable.setTextAlignment(TextAlignment.CENTER);
-            Paragraph companyText = new Paragraph(new Text("IndiaFirst Life Insurance Company Ltd.").setBold());
-            companyText.add(new Text("\n12th and 13th Floor, North [C] Wing, Tower 4, Nesco IT Park, Nesco Center,\n" + "Western Express Highway, Goregaon (East), Mumbai – 400063,\n" + "IRDA Reg. No. 143. CIN: U66010MH2008PLC183679."));
+            Paragraph companyText = new Paragraph(new Text(jsonUtility.getJsonKeyValue("signature", contentJson)).setBold());
+            companyText.add(new Text(jsonUtility.getJsonKeyValue("addr", contentJson)));
             grandFooterTable.addCell(companyText).setTextAlignment(TextAlignment.LEFT);
             Paragraph companyContact = new Paragraph(new Text("Tel: ").setBold());
             companyContact.add(new Text("+91 22 6165 8700"));
@@ -5034,7 +4648,7 @@ public class ETermPdfGenerationServiceImpl extends NomineeAddendumPDF implements
 
             logger.info("Nominee list size is:{}",nomineeList.size());
             if(nomineeList.size() > 1){
-                Table nomineeAddendum = this.generateNomineePDF(pdfUtility, jsonUtility, applicationNo, nomineeList);
+                Table nomineeAddendum = this.generateNomineePDF(pdfUtility, jsonUtility, applicationNo, nomineeList, contentJson);
                 document.add(new AreaBreak(AreaBreakType.NEXT_AREA));
                 document.add(nomineeAddendum);
             }
@@ -5079,7 +4693,7 @@ public class ETermPdfGenerationServiceImpl extends NomineeAddendumPDF implements
         return df.format(centimeters);
     }
 
-    public Table getSecondaryLifeAssuredDetails(String applicationNo,Image imgChecked,Image imgUnchecked,JsonObject planDetailObj,JsonObject insuredPersonBasicDetailObj,JsonObject secondaryPersonalDetailObj,JsonObject secondaryDocumentDetailObj,JsonObject secondaryEmploymentDetailObj,JsonObject secondaryFatcaDetailObj,Set<String> otherSetOccupation,Map<String, String> ageProofMap,String buyFor,boolean isOmniDoc,JsonObject primaryPersonalDetailObj,Table innerProposer,JsonObject userData){
+    public Table getSecondaryLifeAssuredDetails(String applicationNo,Image imgChecked,Image imgUnchecked,JsonObject planDetailObj,JsonObject insuredPersonBasicDetailObj,JsonObject secondaryPersonalDetailObj,JsonObject secondaryDocumentDetailObj,JsonObject secondaryEmploymentDetailObj,JsonObject secondaryFatcaDetailObj,Set<String> otherSetOccupation,Map<String, String> ageProofMap,String buyFor,boolean isOmniDoc,JsonObject primaryPersonalDetailObj,Table innerProposer,JsonObject userData, JsonObject contentJson){
         Table table=new Table(1);
         Table additionalDetails = new Table(2);
         Table lifeAssuredDetails = new Table(2);
@@ -5139,7 +4753,7 @@ public class ETermPdfGenerationServiceImpl extends NomineeAddendumPDF implements
             Table tableCodes;
 
             lifeAssuredDetails.addCell(proposerMergedcell);
-            lifeAssuredDetails.addCell(new Cell().add("Existing IndiaFirst Policy Owner, Kindly enter policy number / client id").setBorder(Border.NO_BORDER));
+            lifeAssuredDetails.addCell(new Cell().add(jsonUtility.getJsonKeyValue("content85", contentJson)).setBorder(Border.NO_BORDER));
             lifeAssuredDetails.addCell(new Cell().add(innerProposer).setBorder(Border.NO_BORDER));
 
 
@@ -5691,7 +5305,7 @@ public class ETermPdfGenerationServiceImpl extends NomineeAddendumPDF implements
             lifeAssuredDetails.addCell(proposerMergedcell);
 
             /////////////////////
-            lifeAssuredDetails.addCell(new Cell().add("Existing IndiaFirst Policy Owner, Kindly enter policy number / client id").setBorder(Border.NO_BORDER));
+            lifeAssuredDetails.addCell(new Cell().add(jsonUtility.getJsonKeyValue("content86", contentJson)).setBorder(Border.NO_BORDER));
             lifeAssuredDetails.addCell(new Cell().add(innerProposer).setBorder(Border.NO_BORDER));
 
             p = new Paragraph();
@@ -5964,7 +5578,7 @@ public class ETermPdfGenerationServiceImpl extends NomineeAddendumPDF implements
         return table;
     }
 
-    public Table getBankDetails(Image imgUnchecked, Image imgChecked,JsonObject primaryBankObj,JsonObject eMandateObj,JsonArray nomineeList){
+    public Table getBankDetails(Image imgUnchecked, Image imgChecked,JsonObject primaryBankObj,JsonObject eMandateObj,JsonArray nomineeList, JsonObject contentJson){
         String bankName = jsonUtility.getJsonKeyValue("Bank_Name", primaryBankObj);
         bankName=bankName.length()>21 ? bankName.substring(0,21) : bankName;
         String branchName = jsonUtility.getJsonKeyValue("Branch_Name", primaryBankObj);
@@ -6202,9 +5816,7 @@ public class ETermPdfGenerationServiceImpl extends NomineeAddendumPDF implements
         nameDetails.addCell(new Cell().add("Appointee Name as per the Bank Account.:").setVerticalAlignment(VerticalAlignment.MIDDLE).setBorder(Border.NO_BORDER));
         nameDetails.addCell(new Cell().add(pdfUtility.createDataTable(appointeeName1,"00000000000000000")).setVerticalAlignment(VerticalAlignment.MIDDLE).setBorder(Border.NO_BORDER));
         p=new Paragraph(new Text("Disclaimer: ").setBold());
-        p.add("In case of non credit to my bank account with/without assigning any reasons there of or if the transaction is delayed or not credited at all for reasons of incomplete/incorrect " +
-                "information, I will not hold IndiaFirst Life Insurance Co. Ltd. responsible. Further, the Company reserves the right to use any alternative payout option including demand draft/payable at par " +
-                "cheque inspite of not opting for the direct credit option.");
+        p.add(jsonUtility.getJsonKeyValue("content87", contentJson));
         nameDetails.addCell(new Cell(1,2).add(p).setBorder(Border.NO_BORDER));
         table.addCell(new Cell().add(nameDetails).setVerticalAlignment(VerticalAlignment.MIDDLE).setBorder(Border.NO_BORDER));
         return table;

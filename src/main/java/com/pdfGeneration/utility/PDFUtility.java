@@ -70,8 +70,7 @@ public class PDFUtility {
         Table grandFooterTable = new Table(2);
         grandFooterTable.setFontSize(8F);
         grandFooterTable.setTextAlignment(TextAlignment.CENTER);
-        Paragraph companyText = new Paragraph(
-                new Text("IndiaFirst Life Insurance Company Ltd.").setFontColor(Color.BLUE));
+        Paragraph companyText = new Paragraph(new Text("company").setFontColor(Color.BLUE));
         companyText.add(new Text("\n12th and 13th Floor, North [C] Wing, Tower 4, Nesco IT Park, Nesco Center,\n" +
                 "Western Express Highway, Goregaon (East), Mumbai – 400063,\n" +
                 "IRDA Reg. No. 143. CIN: U66010MH2008PLC183679."));
@@ -86,7 +85,7 @@ public class PDFUtility {
         companyContact.add(
                 new Text("\n----------------------------------------------------------------------------------------"));
         companyContact.add(new Text("\nE-mail: ").setBold().setFontColor(Color.ORANGE));
-        companyContact.add(new Text("customer.\u001Afirst@indiafirstlife.com"));
+        companyContact.add(new Text("email"));
         companyContact.add(new Text("  Website: ").setBold().setFontColor(Color.ORANGE));
         companyContact.add(new Text("www.india\u001Afirstlife.com"));
 

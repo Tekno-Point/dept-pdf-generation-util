@@ -2527,7 +2527,7 @@ public class DownloadApplicationFormServiceImpl extends NomineeAddendumPDF imple
             planDetails.addCell(new Cell().add(premiumInstallment).setTextAlignment(TextAlignment.CENTER));
             planDetails.addCell(new Cell().add(sumAssured).setTextAlignment(TextAlignment.CENTER));
 
-            planName = jsonUtility.getJsonKeyValue("desc6", contentJson)
+            planName = jsonUtility.getJsonKeyValue("desc6", contentJson);
             planOption="";
             planTerm = "";
             premiumPlayingTerm = "";
@@ -2776,7 +2776,7 @@ public class DownloadApplicationFormServiceImpl extends NomineeAddendumPDF imple
             headingCell.add(p);
             table.addCell(headingCell);
 
-            Table bankDetails = this.getBankDetails(imgUnchecked, imgChecked,primaryBankObj,eMandateObj,nomineeList);
+            Table bankDetails = this.getBankDetails(imgUnchecked, imgChecked,primaryBankObj,eMandateObj,nomineeList,contentJson);
             table.addCell(new Cell().add(bankDetails));
             document.add(table);
 

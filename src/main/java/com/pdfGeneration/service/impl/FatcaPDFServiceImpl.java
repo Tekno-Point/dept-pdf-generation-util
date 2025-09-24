@@ -56,6 +56,7 @@ public class FatcaPDFServiceImpl implements FatcaPDFService {
         logger.info("Personal details object:{}", personalDetailObj);
         JsonObject fatcaDetailObj = jsonUtility.getJsonObjectByKey("fatcaDetails",userData);
         logger.info("Fatca details object:{}", fatcaDetailObj);
+        JsonObject contentJson = jsonUtility.getJsonObjectByKey("content",userData);
 
         String applicationNumber = jsonUtility.getJsonKeyValue("applicationNumber", userData);
         boolean isOmniDoc = jsonUtility.getBooleanKeyValue("isOmniDoc", userData);
@@ -106,19 +107,11 @@ public class FatcaPDFServiceImpl implements FatcaPDFService {
             headingCell.add(p).setBorder(Border.NO_BORDER);
             table.addCell(headingCell);
             p = new Paragraph(
-                    new Text("\nIndividual declaration- US Person* or Person Residing outside India").setBold());
-            p.add("\nYou are requested to consult a legal/tax advisor for Residential Status");
-            p.add("\n\nNote:The information in this section is being collected because of enhancements to IndiaFirst Life Insurance’s new policy issuance procedures in order to fully comply "
-                    +
-                    "with Foreign Account Tax Compliance Act (FATCA) requirements and the Common Reporting Standards (CRS) requirements pursuant to amendments made to "
-                    +
-                    "Income- tax Act,1961 read with Income-Tax Rules, 1962.");
-            p.add("\n\nSelf-Attested Address and ID Proof of Policyholder is mandatory document to be enclosed.");
-            p.add("\n\nFor more information refer:\n" +
-                    "http://www.incometaxindia.gov.in/dtaa/other%20agreements/india_iga_final-_india_english.pdf\n" +
-                    "http://www.oecd.org/ctp/exchange-of-tax-information/automatic-exchange-financial-account-information-common-reporting-standard.pdf\n"
-                    +
-                    "(We are unable to provide advice about your tax residency. If you have any questions about your tax residency, please contact your tax advisor)");
+                    new Text(jsonUtility.getJsonKeyValue("content1", contentJson)).setBold());
+            p.add(jsonUtility.getJsonKeyValue("content2", contentJson));
+            p.add(jsonUtility.getJsonKeyValue("content3", contentJson));
+            p.add(jsonUtility.getJsonKeyValue("content4", contentJson));
+            p.add(jsonUtility.getJsonKeyValue("content5", contentJson));
             table.addCell(new Cell().add(p).setBorder(Border.NO_BORDER));
             headingCell = new Cell();
             headingCell.setBackgroundColor(Color.ORANGE, 100);
@@ -633,37 +626,19 @@ public class FatcaPDFServiceImpl implements FatcaPDFService {
             headingCell.setBackgroundColor(Color.ORANGE, 100);
             headingCell.setHeight(15);
             headingCell.setBorder(Border.NO_BORDER);
-            p = new Paragraph(
-                    "For Any Queries Or More Information, Call Toll Free 1800 209 8700 or mail us at customer.first@indiafirstlife.com");
+            p = new Paragraph(jsonUtility.getJsonKeyValue("content6", contentJson));
             p.setBold();
             p.setFontKerning(FontKerning.YES);
             p.setFontColor(Color.BLACK);
             headingCell.add(p).setBorder(Border.NO_BORDER);
             table.addCell(headingCell);
 
-            p = new Paragraph(
-                    "\n\nNote: Please use multiple forms incase of multiple life assured or multiple nominees");
-            p.add("\n\n*US Person: In case of individuals, US Person means a citizen or resident of the United States. Persons who would qualify as USPersons could be Born in the United "
-                    +
-                    "States, Born outside the United States of a US parent, Naturalized citizens, Green Card Holders, Tax residents. [Please note that above information is provided only for "
-                    +
-                    "quick reference to customers. Please consult your tax/legal advisor for details]");
-            p.add("\n\nI / We confirm that above details provided by me / us are correct and to the best of my knowledge. I / We also confirm that I / We will report any change in my/our tax "
-                    +
-                    "status in future to IndiaFirst Life Insurance within 30 days of such change. I acknowledge that towards compliance with tax information sharing laws, such as "
-                    +
-                    "FATCA/CRS, IndiaFirst Life Insurance may be required to seek additional personal, tax and beneficial owner information and certain certifications and documentation "
-                    +
-                    "from the account holder. Such information may be sought either at the time of Policy issuance or any time subsequently.");
-            p.add("\n\nI hereby give consent to IndiaFirst Life Insurance to share with any regulatory body my information such as contact details, tax identification number / social security "
-                    +
-                    "number, account balances / activities or any transactions undertaken with IndiaFirst Life Insurance.");
-            p.add("\n\nIndiaFirst Life Insurance may deduct from the moneys payable to me such amount as may be required to comply with any instruction issued by a Government/"
-                    +
-                    "Statutory/ Regulatory authority, including, but not limited to, instructions by Indian Authorities to comply with a foreign law, such as FATCA/CRS.");
-            p.add("\n\nI also authorise IndiaFirst Life Insurance to terminate the Policy in the event that appropriate documentation of Insured / Policyholder as may be required by IndiaFirst "
-                    +
-                    "Life Insurance for the compliance as aforesaid is not timely provided to IndiaFirst Life Insurance.");
+            p = new Paragraph(jsonUtility.getJsonKeyValue("content7", contentJson));
+            p.add(jsonUtility.getJsonKeyValue("content8", contentJson));
+            p.add(jsonUtility.getJsonKeyValue("content9", contentJson));
+            p.add(jsonUtility.getJsonKeyValue("content10", contentJson));
+            p.add(jsonUtility.getJsonKeyValue("content11", contentJson));
+            p.add(jsonUtility.getJsonKeyValue("content12", contentJson));
 
             table.addCell(new Cell().add(p).setBorder(Border.NO_BORDER));
 
@@ -728,12 +703,8 @@ public class FatcaPDFServiceImpl implements FatcaPDFService {
             grandFooterTable.setFontSize(8F);
             grandFooterTable.setTextAlignment(TextAlignment.CENTER);
             Paragraph companyText = new Paragraph(
-                    new Text("IndiaFirst Life Insurance Company Ltd.").setFontColor(Color.BLUE));
-            companyText.add(new Text("""
-
-                    12th and 13th Floor, North [C] Wing, Tower 4, Nesco IT Park, Nesco Center,
-                    Western Express Highway, Goregaon (East), Mumbai – 400063,
-                    IRDA Reg. No. 143. CIN: U66010MH2008PLC183679."""));
+                    new Text(jsonUtility.getJsonKeyValue("signature", contentJson)).setFontColor(Color.BLUE));
+            companyText.add(new Text(jsonUtility.getJsonKeyValue("addr", contentJson)));
             grandFooterTable.addCell(companyText).setTextAlignment(TextAlignment.LEFT);
             Paragraph companyContact = new Paragraph(new Text("Tel: ").setBold().setFontColor(Color.ORANGE));
             companyContact.add(new Text("+91 22 6165 8700"));

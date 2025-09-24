@@ -56,6 +56,7 @@ public class EMandatePDFServiceImpl implements EMandatePDFService {
             logger.info("Nominee detail object:{}", nomineeDetailObj);
             JsonObject personalDetailObj = jsonUtility.getJsonObjectByKey("personalDetails",userData);
             logger.info("Personal detail object:{}", personalDetailObj);
+            JsonObject contentJson = jsonUtility.getJsonObjectByKey("content", userData);
 
             String applicationNumber = jsonUtility.getJsonKeyValue("applicationNumber", userData);
             boolean isOmniDoc = jsonUtility.getBooleanKeyValue("isOmniDoc", userData);
@@ -168,11 +169,9 @@ public class EMandatePDFServiceImpl implements EMandatePDFService {
             bankDetails.addCell(new Cell().add("Date: ").setTextAlignment(TextAlignment.CENTER).setBorder(Border.NO_BORDER));
             bankDetails.addCell(new Cell().add(date).setUnderline().setBorder(Border.NO_BORDER));
             p = new Paragraph(new Text("Ref: ").setBold());
-            p.add("Authorization to pay IndiaFirst Life Insurance premium through Direct Debit (DD) / NACH");
-            p.add("\nDear Sir/Madam");
-            p.add("\nI/We undersigned authorize IndiaFirst Life Insurance Company Limited / their authorized service provider to debit my / our bank"
-                    +
-                    "account through NACH/Direct Debit towards payment of my/our life insurance premium, as per the details provided below\n");
+            p.add(jsonUtility.getJsonKeyValue("content1" , contentJson));
+            p.add(jsonUtility.getJsonKeyValue("content2" , contentJson));
+            p.add(jsonUtility.getJsonKeyValue("content3" , contentJson));
             p.add(imgChecked);
             p.add("     Direct Debit");
             Cell proposerMergedcell = new Cell(1, 3);
@@ -315,10 +314,10 @@ public class EMandatePDFServiceImpl implements EMandatePDFService {
 
             Table autoDebitDetails = new Table(new float[]{600F, 600F});
             autoDebitDetails.setFontSize(5);
-            p = new Paragraph("Declaration for Auto Debit").setBold();
+            p = new Paragraph(jsonUtility.getJsonKeyValue("declarationHeading" , contentJson)).setBold();
             autoDebitDetails.addCell(new Cell().add(p).setBorder(Border.NO_BORDER));
 
-            p = new Paragraph("Yes, I/we have attached a blank cancelled cheque Certificate of the Bank Named in the Mandate").setBold();
+            p = new Paragraph(jsonUtility.getJsonKeyValue("declarationContent1" , contentJson)).setBold();
             autoDebitDetails.addCell(new Cell().add(p).setBorder(Border.NO_BORDER));
 
             List autoList = new List(ListNumberingType.DECIMAL);
@@ -326,7 +325,7 @@ public class EMandatePDFServiceImpl implements EMandatePDFService {
             autoList.setMargin(0);
             autoList.setFontSize(5);
             ListItem autoItem = new ListItem();
-            p = new Paragraph("If the transaction is delayed or not effected at all for the reasons of incomplete or incorrect information, I/we shall not hold the company responsible for such delay or non credit to my policy.");
+            p = new Paragraph(jsonUtility.getJsonKeyValue("declarationContent2" , contentJson));
 
             p.setMargins(0, 0, 0, 0); // Set margins to zero
             p.setMultipliedLeading(1); // Set the line spacing factor to 1 (no extra spacing)
@@ -334,43 +333,43 @@ public class EMandatePDFServiceImpl implements EMandatePDFService {
             autoList.add(autoItem);
 
             autoItem = new ListItem();
-            p = new Paragraph("In addition, I/We understand and agree that the premium amount to be debited from my/our account may vary due to taxes and other statutory levies as may be applicable from time to time. I/We also accept that transaction will be effected to the policy on the due date (provided it is a working day).");
+            p = new Paragraph(jsonUtility.getJsonKeyValue("declarationContent3" , contentJson));
             p.setMargins(0, 0, 0, 0); // Set margins to zero
             p.setMultipliedLeading(1);  // Set the line spacing factor to 1 (no extra spacing)
             autoItem.add(p);
             autoList.add(autoItem);
 
             autoItem = new ListItem();
-            p = new Paragraph("In case of an ECS/direct debit dishonour, I/We authorize IndiaFirst Life Insurance to re-debit my/our bank account with the mentioned bank to recover the premium payable.");
+            p = new Paragraph(jsonUtility.getJsonKeyValue("declarationContent4" , contentJson));
             p.setMargins(0, 0, 0, 0); // Set margins to zero
             p.setMultipliedLeading(1);  // Set the line spacing factor to 1 (no extra spacing)
             autoItem.add(p);
             autoList.add(autoItem);
 
             autoItem = new ListItem();
-            p = new Paragraph("I hereby authorize IndiaFirst Life Insurance Co.Ltd and their authorize service providers to debit my Bank Account directly or by NACH for collection of premium payments.");
+            p = new Paragraph(jsonUtility.getJsonKeyValue("declarationContent5" , contentJson));
             p.setMargins(0, 0, 0, 0); // Set margins to zero
             p.setMultipliedLeading(1);  // Set the line spacing factor to 1 (no extra spacing)
             autoItem.add(p);
             autoList.add(autoItem);
 
             autoItem = new ListItem();
-            p = new Paragraph("I/We hereby agree to maintain adequate balance in the account stated herein for availing Direct Debit facility.");
+            p = new Paragraph(jsonUtility.getJsonKeyValue("declarationContent6" , contentJson));
             p.setMargins(0, 0, 0, 0); // Set margins to zero
             p.setMultipliedLeading(1);  // Set the line spacing factor to 1 (no extra spacing)
             autoItem.add(p);
             autoList.add(autoItem);
 
             autoItem = new ListItem();
-            p = new Paragraph("I / We hereby authorize the bank to debit my account towards charges for DD mandate verification if any applicable.").setBold();
+            p = new Paragraph(jsonUtility.getJsonKeyValue("declarationContent7" , contentJson)).setBold();
             p.setMargins(0, 0, 0, 0); // Set margins to zero
             p.setMultipliedLeading(1);  // Set the line spacing factor to 1 (no extra spacing)
             autoItem.add(p);
             autoList.add(autoItem);
 
             autoItem = new ListItem();
-            p = new Paragraph("The maximum validity of NACH mandate is 30 Years. If the policy’s premium paying term is greater than 30 years than we will need another mandate before the " +
-                    "end of 30 Years” should be displayed as shown below.");
+            p = new Paragraph(jsonUtility.getJsonKeyValue("declarationContent8" , contentJson));
+
             p.setMargins(0, 0, 0, 0); // Set margins to zero
             p.setMultipliedLeading(1);  // Set the line spacing factor to 1 (no extra spacing)
             autoItem.add(p);
@@ -379,7 +378,7 @@ public class EMandatePDFServiceImpl implements EMandatePDFService {
             autoDebitDetails.addCell(new Cell().add(autoList).setBorder(Border.NO_BORDER));
 
             proposerMergedcell = new Cell(6, 1);
-            p = new Paragraph("It is certified that as per our records, the bank account particulars of the mandate above are correct and the signature of the bank account holder is true.");
+            p = new Paragraph(jsonUtility.getJsonKeyValue("declarationContent9" , contentJson));
             proposerMergedcell.add(p.setFontSize(5f));
             Table bankAuth = new Table(new float[]{200F, 500F});
             bankAuth.addCell(new Cell().add("Bank Stamp").setTextAlignment(TextAlignment.CENTER).setHeight(10).setBorder(Border.NO_BORDER));
@@ -388,10 +387,10 @@ public class EMandatePDFServiceImpl implements EMandatePDFService {
             bankAuth.addCell(new Cell().add("").setHeight(5).setBorder(Border.NO_BORDER));
             proposerMergedcell.add(bankAuth);
 
-            p = new Paragraph("DD mandate should be verified by bank branch and should have \"Signature verified stamp\" along with \"fixed specimen signature number\" .").setBold();
+            p = new Paragraph(jsonUtility.getJsonKeyValue("declarationContent10" , contentJson)).setBold();
             proposerMergedcell.add(p);
             p = new Paragraph();
-            p.add("NACH/DD is automated facitlity which debits your premium from the bank account specified by you on your premium due date, except in case of a holiday.");
+            p.add(jsonUtility.getJsonKeyValue("declarationContent11" , contentJson));
             proposerMergedcell.add(p);
             autoDebitDetails.addCell(new Cell().add(proposerMergedcell).setBorder(Border.NO_BORDER));
             document.add(autoDebitDetails);
@@ -418,7 +417,7 @@ public class EMandatePDFServiceImpl implements EMandatePDFService {
             String umrn = "";
             String sponsorBankCode = "";
             String utilityCode = "";
-            String authorizeName = " IndiaFirst Life Insurance Company Ltd. ";
+            String authorizeName = jsonUtility.getJsonKeyValue("heading" , contentJson);
             String amountInRupees = amountWords;
             String emailIdNach = emailId;
             String policyNoNach = "";

@@ -39,9 +39,6 @@ public class GenerateHealthPDFImpl implements GenerateHealthPDF {
     @Autowired
     private JsonUtility jsonUtility;
 
-//    @Autowired
-//    private OnlineUtility onlineUtility;
-
     @Override
     public byte[] generateHyperTensionPDF(String applicationNumber, String nameOfLifeAssured, JsonObject hypertension, boolean isOmniDoc, String placeName, String primaryMobileNo, String countryCode, JsonObject imagesJson) {
 
@@ -1810,7 +1807,7 @@ public class GenerateHealthPDFImpl implements GenerateHealthPDF {
     }
 
     @Override
-    public byte[] generateCovidPDF(String applicationNumber, String nameOfLifeAssured, JsonObject medicalObj, boolean isOmniDoc, String placeName, String primaryMobileNo, JsonObject travelObj, String countryCode, JsonObject imagesJson) {
+    public byte[] generateCovidPDF(String applicationNumber, String nameOfLifeAssured, JsonObject medicalObj, boolean isOmniDoc, String placeName, String primaryMobileNo, JsonObject travelObj, String countryCode, JsonObject imagesJson, JsonObject contentJson) {
         ByteArrayOutputStream baos = new ByteArrayOutputStream();
         byte[] bytesPdf = null;
         try (PdfWriter writer = new PdfWriter(baos)) {
@@ -2240,7 +2237,7 @@ public class GenerateHealthPDFImpl implements GenerateHealthPDF {
 
             p = new Paragraph();
             p.add(imgChecked);
-            p.add("     I hereby confirm that the answers to the questions provided by me/us are to the best of our knowledge and true. I have not withheld any " + "material fact or information which may affect the assessment or acceptance of this proposal by IndiaFirst Life Insurance Company Ltd. I " + "understand and accept that I will receive all communication including the soft copy of the policy document via email/WhatsApp or in link via " + "SMS from IndiaFirst Life Insurance Company Ltd.");
+            p.add(jsonUtility.getJsonKeyValue("declarationContent1", contentJson));
             p.add("\n");
             p.add("Place: ");
             p.add(new Text(placeName).setUnderline().setBold());

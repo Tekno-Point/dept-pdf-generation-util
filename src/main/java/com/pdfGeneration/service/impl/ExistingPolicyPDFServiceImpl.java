@@ -95,6 +95,7 @@ public class ExistingPolicyPDFServiceImpl implements ExistingPolicyPDFService {
 
             String applicationNumber = jsonUtility.getJsonKeyValue("applicationNumber", userData);
             boolean isOmniDoc = jsonUtility.getBooleanKeyValue("isOmniDoc", userData);
+            JsonObject contentJson = jsonUtility.getJsonObjectByKey("content", userData);
 
             JsonObject imagesJson = jsonUtility.getJsonObjectByKey("images", userData);
             String logoFilename = jsonUtility.getJsonKeyValue("risipLogo", imagesJson);
@@ -152,8 +153,7 @@ public class ExistingPolicyPDFServiceImpl implements ExistingPolicyPDFService {
             table.setWidthPercent(100);
             Cell headingCell = new Cell();
             headingCell.setBackgroundColor(Color.GRAY, 100);
-            p = new Paragraph(
-                    "Details of life insurance policies held/ proposals applied with life insurance companies (including existing policies with IndiaFirst Life Insurance Co. Ltd.)");
+            p = new Paragraph(jsonUtility.getJsonKeyValue("content1", contentJson));
             p.setBold();
             p.setFontKerning(FontKerning.YES);
             p.setFontColor(Color.WHITE);
@@ -222,9 +222,7 @@ public class ExistingPolicyPDFServiceImpl implements ExistingPolicyPDFService {
                 headingCell.add(p);
                 table.addCell(headingCell);
             }
-            p = new Paragraph(
-                    "Have you ever applied for life insurance policies with IndiaFirst Life Insurance Co. Ltd and with other insurers? If yes, please give full details below, with present status and terms of acceptance "
-                            + "for all proposals/ policies applied:    ");
+            p = new Paragraph(jsonUtility.getJsonKeyValue("content1", contentJson));
             logger.info("Myself for health Obj -- primarySecondaryPersonalDetail: ");
             if (existingInsuranceAccountPrimaryStatus.equalsIgnoreCase("y")) {
                 p.add(imgChecked);
@@ -353,11 +351,7 @@ public class ExistingPolicyPDFServiceImpl implements ExistingPolicyPDFService {
                 p.setFontColor(Color.WHITE);
                 headingCell.add(p);
                 table.addCell(headingCell);
-                logger.info("other than myself for health Obj -- secondaryObj: ");
-                p = new Paragraph(
-                        "Have you ever applied for life insurance policies with IndiaFirst Life Insurance Co. Ltd and with other insurers? If yes, please give full details below, with present status and terms of acceptance "
-                                + "for all proposals/ policies applied:    ");
-                logger.info("Myself for health Obj -- primarySecondaryPersonalDetail: ");
+                p = new Paragraph(jsonUtility.getJsonKeyValue("content1", contentJson));
                 if (existingInsuranceAccountSecondaryStatus.equalsIgnoreCase("y")) {
                     p.add(imgChecked);
                 } else {
@@ -459,7 +453,7 @@ public class ExistingPolicyPDFServiceImpl implements ExistingPolicyPDFService {
             String[] splitDate = str.split("/");
             p = new Paragraph();
             p.add(new Text("Declaration: \n").setBold());
-            p.add("I hereby confirm that the information related to my Previous Insurance details herein above are true and correct. The same information can be considered for acceptance of this proposal by IndiaFirst Life Insurance Company Ltd.");
+            p.add(jsonUtility.getJsonKeyValue("declarationContent1", contentJson));
             p.add("\n\nSigned at  ");
             p.add(new Text(placeName).setBold().setUnderline());
             p.add("  On This Day  ");
@@ -492,10 +486,8 @@ public class ExistingPolicyPDFServiceImpl implements ExistingPolicyPDFService {
 
             Table grandFooterTable = new Table(new float[]{500F, 500F});
             grandFooterTable.setTextAlignment(TextAlignment.CENTER);
-            Paragraph companyText = new Paragraph(new Text("IndiaFirst Life Insurance Company Ltd."));
-            companyText.add(new Text("\n12th and 13th Floor, North [C] Wing, Tower 4, Nesco IT Park, Nesco Center,\n" +
-                    "Western Express Highway, Goregaon (East), Mumbai – 400063,\n" +
-                    "IRDA Reg. No. 143. CIN: U66010MH2008PLC183679."));
+            Paragraph companyText = new Paragraph(new Text(jsonUtility.getJsonKeyValue("signature", contentJson)));
+            companyText.add(new Text(jsonUtility.getJsonKeyValue("addr", contentJson)));
             grandFooterTable.addCell(companyText).setTextAlignment(TextAlignment.LEFT);
             Paragraph companyContact = new Paragraph(new Text("Tel: ").setBold());
             companyContact.add(new Text("+91 22 6165 8700"));

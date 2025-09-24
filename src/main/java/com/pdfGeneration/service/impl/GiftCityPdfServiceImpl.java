@@ -821,7 +821,7 @@ public class GiftCityPdfServiceImpl implements GiftCityPdfService {
             p.add("\n");
             p.add(new Text(jsonUtility.getJsonKeyValue("consent2", contentJson))).setBold();
             p.add(new Text(jsonUtility.getJsonKeyValue("declarationHeading1", contentJson))).setBold();
-            p.add(jsonUtility.getJsonKeyValue("declarationContent1", contentJson)));
+            p.add(jsonUtility.getJsonKeyValue("declarationContent1", contentJson));
             p.add(new Text(jsonUtility.getJsonKeyValue("declarationHeading2", contentJson)).setBold());
             p.add(jsonUtility.getJsonKeyValue("declarationContent2", contentJson));
             table.addCell(new Cell().add(p).setBorder(Border.NO_BORDER));
@@ -942,7 +942,7 @@ public class GiftCityPdfServiceImpl implements GiftCityPdfService {
             Table grandFooterTable = new Table(1);
             grandFooterTable.setTextAlignment(TextAlignment.CENTER);
             Paragraph companyText = new Paragraph(new Text(jsonUtility.getJsonKeyValue("signature", contentJson)).setBold());
-            companyText.add(new Text(jsonUtility.getJsonKeyValue("addr", contentJson))));
+            companyText.add(new Text(jsonUtility.getJsonKeyValue("addr", contentJson)));
             grandFooterTable.addCell(companyText).setTextAlignment(TextAlignment.CENTER);
             grandFooterTable.setWidth(UnitValue.createPercentValue(100));
             pdfDoc.getDefaultPageSize();
