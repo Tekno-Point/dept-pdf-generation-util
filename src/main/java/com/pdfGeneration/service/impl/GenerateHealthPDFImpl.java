@@ -473,11 +473,6 @@ public class GenerateHealthPDFImpl implements GenerateHealthPDF {
     }
 
     @Override
-    public byte[] generateHyperTensionPDF(String applicationNumber, String nameOfLifeAssured, JsonObject medical, boolean isOmniDoc, String placeName, String primaryMobileNo, String countryCode) {
-        return new byte[0];
-    }
-
-    @Override
     public byte[] generateThyroidPDF(String applicationNumber, String nameOfLifeAssured, JsonObject medical, boolean isOmniDoc, String placeName, String primaryMobileNo, String countryCode, JsonObject imagesJson) {
         ByteArrayOutputStream baos = new ByteArrayOutputStream();
         byte[] bytesPdf = null;
@@ -771,16 +766,6 @@ public class GenerateHealthPDFImpl implements GenerateHealthPDF {
             logger.info("Error in generateThyroidPDF: {}", ex);
         }
         return bytesPdf;
-    }
-
-    @Override
-    public byte[] generateRespiratoryPDF(String applicationNumber, String nameOfLifeAssured, JsonObject medical, boolean isOmniDoc, String placeName, String primaryMobileNo, String countryCode) {
-        return new byte[0];
-    }
-
-    @Override
-    public byte[] generateDiabetesPDF(String applicationNumber, String nameOfLifeAssured, JsonObject medical, boolean isOmniDoc, String placeName, String primaryMobileNo, String countryCode) {
-        return new byte[0];
     }
 
     @Override

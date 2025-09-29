@@ -28,6 +28,7 @@ abstract class NomineeAddendumPDF {
         Table nomineeTable = new Table(1);
         Table table = new Table(1);
 
+
         String checkedLogo = jsonUtility.getJsonKeyValue("checkedLogo", imagesJson);
         String imgCheckBase64 = pdfUtility.getImageAsBase64(checkedLogo);
         String uncheckedLogo = jsonUtility.getJsonKeyValue("uncheckedLogo", imagesJson);

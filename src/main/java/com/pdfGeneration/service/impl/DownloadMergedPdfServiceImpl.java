@@ -94,6 +94,8 @@ public class DownloadMergedPdfServiceImpl implements DownloadMergedPdfService {
             String placeName = jsonUtility.getJsonKeyValue("city", primaryPersonalDetailsObj);
             String primaryMobileNo = jsonUtility.getJsonKeyValue("mobileNumber", primaryPersonalDetailsObj);
             JsonObject imagesJson = jsonUtility.getJsonObjectByKey("images", userData);
+            JsonObject contentJson = jsonUtility.getJsonObjectByKey("content", userData);
+
             List<String> combineData = new ArrayList<>();
             for (JsonElement element : pdfNames) {
                 String names = element.getAsString();
@@ -245,7 +247,7 @@ public class DownloadMergedPdfServiceImpl implements DownloadMergedPdfService {
                     String respiratoryResp = "";
                     try {
                         respiratoryResp = Base64.getEncoder().encodeToString(
-                                generateHealthPDF.generateRespiratoryPDF(applicationNo, lifeAssureName, medical, isOmniDoc, placeName, primaryMobileNo, countryCode));
+                                generateHealthPDF.generateRespiratoryPDF(applicationNo, lifeAssureName, medical, isOmniDoc, placeName, primaryMobileNo, countryCode, imagesJson));
                         logger.info("Respiratory pdf response:{}", respiratoryResp);
                         if (!respiratoryResp.isEmpty()) {
                             combineData.add(respiratoryResp);
@@ -259,7 +261,7 @@ public class DownloadMergedPdfServiceImpl implements DownloadMergedPdfService {
                     String hyperTensionResp = "";
                     try {
                         hyperTensionResp = Base64.getEncoder().encodeToString(
-                                generateHealthPDF.generateHyperTensionPDF(applicationNo, lifeAssureName, medical, isOmniDoc, placeName, primaryMobileNo, countryCode));
+                                generateHealthPDF.generateHyperTensionPDF(applicationNo, lifeAssureName, medical, isOmniDoc, placeName, primaryMobileNo, countryCode, imagesJson));
                         logger.info("Hyper tension pdf response:{}", hyperTensionResp);
                         if (!hyperTensionResp.isEmpty()) {
                             combineData.add(hyperTensionResp);
@@ -273,7 +275,7 @@ public class DownloadMergedPdfServiceImpl implements DownloadMergedPdfService {
                     String diabetesResp = "";
                     try {
                         diabetesResp = Base64.getEncoder().encodeToString(
-                                generateHealthPDF.generateDiabetesPDF(applicationNo, lifeAssureName, medical, isOmniDoc, placeName, primaryMobileNo, countryCode));
+                                generateHealthPDF.generateDiabetesPDF(applicationNo, lifeAssureName, medical, isOmniDoc, placeName, primaryMobileNo, countryCode, imagesJson));
                         logger.info("Diabetes pdf response:{}", diabetesResp);
                         if (!diabetesResp.isEmpty()) {
                             combineData.add(diabetesResp);
@@ -286,7 +288,7 @@ public class DownloadMergedPdfServiceImpl implements DownloadMergedPdfService {
                     String covidResp = "";
                     try {
                         covidResp = Base64.getEncoder().encodeToString(
-                                generateHealthPDF.generateCovidPDF(applicationNo, lifeAssureName, medicalObj, isOmniDoc, placeName, primaryMobileNo, travelObj, countryCode));
+                                generateHealthPDF.generateCovidPDF(applicationNo, lifeAssureName, medicalObj, isOmniDoc, placeName, primaryMobileNo, travelObj, countryCode, imagesJson, contentJson));
                         logger.info("Covid pdf response:{}", covidResp);
                         if (!covidResp.isEmpty()) {
                             combineData.add(covidResp);
